@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0f4c55">
+<title>منصة تأمل</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Readex+Pro:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='19' fill='%230f4c55'/%3E%3Cpath d='M20 8c4 6 6 9 6 12a6 6 0 0 1-12 0c0-3 2-6 6-12z' fill='%23f2785c'/%3E%3C/svg%3E">
+<style>
+/* VOICE everyday learning tool for adult professionals: calm, warm, respectful
+   IDEA the still surface of water: a drop falls (the question), ripples widen (reflection)
+   PICTURE concentric ripples in a deep-water band; the teacher's goal surfaces as a reflected sentence
+   COLOUR deep water #0f4c55 dominant, lagoon #3fb6b2 support, sunset coral #f2684a accent, white ground
+   TYPE Readex Pro for titles + IBM Plex Sans Arabic for text
+   LAYOUT phone-first single column for teachers; wide two-panel dashboard for the trainer */
+:root{color-scheme:light dark;
+--bg:light-dark(#ffffff,#0a1a1e);--surf:light-dark(#f3f8f8,#11272c);--line:light-dark(#d6e6e6,#22424a);
+--ink:light-dark(#10292e,#e6f2f1);--soft:light-dark(#4d6a6f,#9bb9bb);
+--deep:light-dark(#0f4c55,#0d3d45);--lagoon:light-dark(#2a9d99,#4cc3be);--lagoonbg:light-dark(#e3f4f3,#163a3d);
+--coral:light-dark(#e0563a,#f2785c);--coralbg:light-dark(#fdece7,#3a2420);--ok:light-dark(#1f7a4d,#5fcf95);--okbg:light-dark(#e4f4ea,#173528);
+--warn:light-dark(#a35d00,#f0b354);--warnbg:light-dark(#fdf1dd,#3a2c14)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.65 "IBM Plex Sans Arabic",Tahoma,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:"Readex Pro","IBM Plex Sans Arabic",sans-serif;line-height:1.2;margin:0;letter-spacing:0}
+h1{font-size:clamp(26px,5vw,36px)}h2{font-size:22px}h3{font-size:18px}
+p{margin:.4em 0}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+.wrap{max-width:600px;margin:0 auto;padding:0 16px}
+.wide{max-width:1180px;margin:0 auto;padding:0 max(16px,3vw)}
+.band{background:var(--deep);color:#eef8f7;position:relative;overflow:hidden}
+.band .rip{position:absolute;inset:auto -60px -120px auto;width:340px;height:340px;opacity:.5;pointer-events:none}
+.band a,.band .soft{color:#b9dedb}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:14px}
+.logo{display:flex;align-items:center;gap:10px;font-family:"Readex Pro";font-weight:700;font-size:20px}
+.logo svg{width:34px;height:34px}
+.hero{padding:6px 0 28px;position:relative}
+.hero p{color:#cfe9e6;max-width:46ch}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:99px;font-size:13px;background:var(--lagoonbg);color:var(--ink);white-space:nowrap}
+.band .chip{background:rgba(255,255,255,.12);color:#eef8f7}
+.chip.ok{background:var(--okbg);color:var(--ok)}.chip.warn{background:var(--warnbg);color:var(--warn)}.chip.cor{background:var(--coralbg);color:var(--coral)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:10px 18px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);font-weight:600}
+.btn:hover{border-color:var(--lagoon)}
+.btn:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,.card:focus-visible{outline:3px solid var(--lagoon);outline-offset:2px}
+.btn.pri{background:var(--coral);border-color:var(--coral);color:#fff}
+.btn.sec{background:var(--deep);border-color:var(--deep);color:#fff}
+.btn.sm{min-height:38px;padding:6px 12px;font-size:14px;border-radius:10px}
+.btn.on{background:var(--lagoonbg);border-color:var(--lagoon)}
+.btn[disabled]{opacity:.5;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.sp{justify-content:space-between}
+.stack>*+*{margin-top:14px}
+.card{background:var(--surf);border:1px solid var(--line);border-radius:16px;padding:16px}
+.card.white{background:var(--bg)}
+label{display:block;font-weight:600;margin-bottom:6px}
+input[type=text],textarea,select{width:100%;font-size:16px;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg)}
+textarea{min-height:96px;resize:vertical}
+.muted{color:var(--soft);font-size:14px}
+.sec-h{display:flex;align-items:center;gap:10px;margin:22px 0 10px}
+.num{flex:none;width:30px;height:30px;border-radius:50%;background:var(--deep);color:#fff;display:grid;place-items:center;font-weight:700;font-size:14px}
+.acts{display:grid;gap:10px}
+.act{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;text-align:start;width:100%;background:var(--bg);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px}
+.act:hover{border-color:var(--lagoon)}
+.act .dot{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:14px;background:var(--surf);border:1.5px solid var(--line)}
+.act.done .dot{background:var(--ok);border-color:var(--ok);color:#fff}
+.act.live{border-color:var(--coral);box-shadow:0 0 0 3px var(--coralbg)}
+.act b{display:block}
+.live-bar{position:sticky;top:0;z-index:5;background:var(--coral);color:#fff;padding:10px 16px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.live-bar .btn{background:#fff;color:var(--coral);border-color:#fff;min-height:36px}
+.nav{position:sticky;bottom:0;z-index:5;background:var(--bg);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px))}
+.nav button{background:none;border:0;min-height:52px;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:13px;gap:2px;color:var(--soft);position:relative}
+.nav button svg{width:22px;height:22px}
+.nav button.on{color:var(--deep);background:var(--lagoonbg);font-weight:700}
+:root[data-theme=dark] .nav button.on{color:var(--ink)}
+.badge{position:absolute;top:4px;inset-inline-start:calc(50% + 6px);background:var(--coral);color:#fff;border-radius:99px;font-size:11px;min-width:18px;padding:0 5px;line-height:18px}
+.back{background:none;border:0;color:var(--soft);display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:start;width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg)}
+.opt.on{border-color:var(--lagoon);background:var(--lagoonbg)}
+.opt .box{flex:none;width:22px;height:22px;border-radius:6px;border:2px solid var(--line);margin-top:2px;display:grid;place-items:center;color:#fff;font-size:14px}
+.opt.on .box{background:var(--lagoon);border-color:var(--lagoon)}
+.wall{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.note{background:var(--lagoonbg);border-radius:14px;padding:12px 14px;font-size:15px}
+.note.mine{background:var(--coralbg)}
+.note small{display:block;color:var(--soft);margin-top:6px;font-size:13px}
+.reflect{background:var(--deep);color:#fff;border-radius:18px;padding:20px;position:relative;overflow:hidden}
+.reflect p{font-family:"Readex Pro";font-size:19px;line-height:1.6;position:relative}
+.reflect .mirror{transform:scaleY(-1);opacity:.14;filter:blur(1px);margin-top:4px;-webkit-mask-image:linear-gradient(transparent,#000);mask-image:linear-gradient(transparent,#000)}
+.steps{display:flex;gap:6px;margin:12px 0}
+.steps i{flex:1;height:6px;border-radius:99px;background:var(--line)}
+.steps i.on{background:var(--lagoon)}
+.q{display:flex;gap:8px;flex-wrap:wrap}
+.tbl{width:100%;border-collapse:collapse;font-size:15px}
+.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:10px 8px;text-align:start;vertical-align:top}
+.tbl th{font-size:13px;color:var(--soft);font-weight:600}
+.scroll{overflow-x:auto}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.tabs .btn{flex:none}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.kpi{background:var(--surf);border-radius:14px;padding:14px;border:1px solid var(--line)}
+.kpi b{display:block;font-family:"Readex Pro";font-size:30px;line-height:1.1}
+.bar{height:12px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar span{display:block;height:100%;background:var(--lagoon)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.prog{font-size:14px}.prog th,.prog td{padding:8px 6px;white-space:nowrap}
+.prog .nm{position:sticky;inset-inline-start:0;background:var(--bg);z-index:1;min-width:150px;white-space:normal}
+.prog .ck{text-align:center;color:var(--line);font-weight:700}.prog .ck.y{color:var(--ok)}
+.prog .vt{writing-mode:vertical-rl;transform:rotate(180deg);display:inline-block;max-height:110px;font-size:13px}
+.prog th{text-align:center;vertical-align:bottom}.prog .pc{min-width:90px}.prog .pc .bar{height:6px;margin-top:4px}
+.prog tr.me td{background:var(--coralbg)}.prog tfoot td{border-bottom:0}
+.kcard{border:2px dashed var(--line);border-radius:16px;padding:14px;text-align:center;background:var(--bg)}
+.kcard .qr{width:120px;height:120px;margin:8px auto;background:#fff;padding:6px;border-radius:8px}
+.kcard .qr svg{width:100%;height:100%;display:block}
+.kcard .code{font-family:"Readex Pro";font-size:24px;letter-spacing:.12em;direction:ltr}
+.tmr{font-family:"Readex Pro";font-variant-numeric:tabular-nums;direction:ltr;display:inline-block}
+.screen{min-height:100%;background:var(--deep);color:#fff;padding:28px max(24px,4vw)}
+.screen h1{font-size:clamp(32px,5vw,60px)}
+.screen .note{background:rgba(255,255,255,.1);color:#fff;font-size:18px}
+.screen .tmr{font-size:clamp(48px,9vw,110px)}
+.proto{font-size:13px;background:var(--warnbg);color:var(--warn);padding:6px 16px;text-align:center}
+.foot{text-align:center;color:var(--soft);font-size:13px;padding:22px 16px 90px}
+.toast{position:fixed;inset-inline:16px;bottom:84px;margin:auto;max-width:420px;background:var(--ink);color:var(--bg);padding:12px 16px;border-radius:12px;z-index:20;text-align:center;animation:up .25s}
+@keyframes up{from{transform:translateY(12px);opacity:0}}
+@keyframes ring{from{transform:scale(.6);opacity:.9}to{transform:scale(1.25);opacity:0}}
+.drop circle.r{transform-origin:170px 170px;animation:ring 4.5s ease-out infinite}
+.drop circle.r:nth-child(2){animation-delay:1.5s}.drop circle.r:nth-child(3){animation-delay:3s}
+@media(prefers-reduced-motion:reduce){.drop circle.r,.toast{animation:none}}
+.gate{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.gate button{text-align:start;padding:18px;border-radius:16px;border:1.5px solid var(--line);background:var(--bg);min-height:120px}
+.gate button:hover{border-color:var(--lagoon)}
+.ex{border-inline-start:4px solid var(--line);padding:8px 12px;border-radius:4px;background:var(--surf)}
+.ex.good{border-color:var(--ok)}.ex.bad{border-color:var(--coral)}
+@media(max-width:600px){.split{grid-template-columns:minmax(0,1fr)}.tbl{font-size:14px}}
+@media(min-width:900px){.dash{display:grid;grid-template-columns:260px minmax(0,1fr);gap:24px;align-items:start}.dash .side{position:sticky;top:16px}.tabs{flex-direction:column}.tabs .btn{justify-content:flex-start}}
+
+#print{display:none}
+@media print{
+ @page{size:A4;margin:10mm}
+ body{background:#fff}
+ #app,.toast{display:none!important}
+ #print{display:block}
+ .psheet{display:grid;grid-template-columns:repeat(3,1fr);gap:6mm}
+ .psheet .kcard{break-inside:avoid;border-style:solid;border-width:2.5px;padding:4mm;height:85mm;color:#10292e;background:#fff}
+ .psheet .kcard .qr{width:38mm;height:38mm}
+ .psheet .muted{color:#4d6a6f}
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<div id="print"></div>
+<script>
+const PACK={id:'al',name:'تطوير مهارات التعلم النشط بثقة',short:'التعلم النشط'};
+const COHORTS_DEFAULT=[
+ {id:1,name:'المجموعة الأولى',date:'الإثنين 30 نوفمبر',color:'#2a9d99'},
+ {id:2,name:'المجموعة الثانية',date:'الثلاثاء 1 ديسمبر',color:'#e0563a'},
+ {id:3,name:'المجموعة الثالثة',date:'الأربعاء 2 ديسمبر',color:'#6b5bd6'},
+ {id:4,name:'المجموعة الرابعة',date:'الخميس 3 ديسمبر',color:'#c48a00'}];
+const ACTS=[
+ {id:'nomu',t:'في نمو أولاً',min:30,mode:'فردي',d:'دليل الحقيبة، التقويم القبلي، واستبانة TALIS'},
+ {id:'compass',t:'بوصلة اليوم',min:5,mode:'فردي ثم ثنائي',d:'ماذا يحدث في صفك فعلاً؟'},
+ {id:'cycle',t:'دورة التعلم النشط',min:20,mode:'فردي',d:'من أين ينطلق كل مدخل؟'},
+ {id:'notes',t:'التدوين التعاوني',min:5,mode:'ثنائي',d:'لخّص ثم قارن بزميلك'},
+ {id:'strat',t:'استراتيجيات التعاون والتقويم',min:25,mode:'الجميع',d:'اختر ما يناسب صفك، وشارك على الجدار'},
+ {id:'tool',t:'صمّم أداة تقويمك الذاتي',min:35,mode:'فردي',d:'الأداة التي ستطبقها في مهمتك'},
+ {id:'gallery',t:'جولة العروض',min:15,mode:'الجميع',d:'نجمتان وأمنية على أدوات زملائك'},
+ {id:'goal',t:'من البوصلة إلى الهدف',min:15,mode:'فردي ثم ثنائي',d:'صُغ هدفك الشخصي خطوة بخطوة'},
+ {id:'task',t:'مهمة التأمل: افهمها وخطّط لها',min:15,mode:'فردي ثم ثنائي',d:'اخرج من القاعة وخطتك جاهزة'}];
+const CONCEPTS=['التعلم القائم على الاستقصاء','التعلم القائم على حل المشكلات','التعلم القائم على المشاريع','نجمتان وأمنية','إجراء التوقف المؤقت','جولة العروض','تحليل سلالم التقدير','جداول الإيجابيات والسلبيات','التقويم الذاتي بسلم تقدير','توثيق التعلم (صور، سجلات، بطاقات خروج)','التدوين التعاوني'];
+const STRATS=[
+ ['تحليل سلالم التقدير','يحلل الطلاب في أزواج نموذج عمل سابق بالسلم نفسه الذي سيُقوَّمون به، فيفهمون معنى الجودة قبل أن يبدؤوا.'],
+ ['إجراء التوقف المؤقت','بعد نحو ربع ساعة من الشرح تتوقف دقيقتين، ويقارن الطلاب ملاحظاتهم في أزواج.'],
+ ['جولة العروض','تتنقل المجموعات بين محطات، وتضيف كل مجموعة على إجابات من سبقها.'],
+ ['جداول الإيجابيات والسلبيات','تحلل المجموعات قضية من زوايا متعددة مع تبرير كل نقطة.'],
+ ['نجمتان وأمنية','نقطتا قوة واقتراح واحد للتحسين، في ثلاث إلى خمس دقائق.'],
+ ['توثيق التعلم (صور، سجلات، بطاقات خروج)','صورة مسودة أو مقطع قصير أو بطاقة خروج تكشف كيف يفكر الطالب، لا ما أنتجه فقط.'],
+ ['التقويم الذاتي بسلم تقدير','تأمل قصير يقوّم فيه الطالب عمله بمعايير واضحة بلغته هو.']];
+const CRIT=['طرحت سؤالاً أو أكثر أثناء العمل','شاركت فكرة مع مجموعتي','استمعت لأفكار زملائي','استخدمت ملاحظات زملائي لتحسين عملي','أستطيع أن أشرح كيف وصلت إلى النتيجة','كان منتجي النهائي واضحاً ومكتملاً'];
+const SCALES={yn:['نعم','ليس بعد'],three:['نعم','أحياناً','ليس بعد'],lvl:['أبدأ','أتقدم','أتقنت']};
+const SCALEN={yn:'نعم / ليس بعد',three:'نعم / أحياناً / ليس بعد',lvl:'أبدأ / أتقدم / أتقنت'};
+const CHALL=['طلابي ينتظرون مني أن أحكم على جودة عملهم','المشاركة محصورة في عدد قليل من الطلاب','العمل الجماعي يتحول إلى فوضى أو اتكالية','لا أعرف ما تعلّمه الطلاب فعلاً إلا في الاختبار','الطلاب يستمعون أكثر مما يفكرون'];
+const EVID=['تعليقات الطلاب على الأداة','ملاحظاتي في بطاقة الملاحظة','صور من أعمال الطلاب','بطاقات الخروج','عدد الطلاب المشاركين قبل التجربة وبعدها'];
+const STORY={
+ ar:{s:'اللغة العربية',who:'أ. ماجد، الصف الخامس، التعبير الكتابي',days:['اختار حصة التعبير يوم الثلاثاء، وطبع أداته: ثلاثة معايير بلغة الطلاب ومقياس «نعم / ليس بعد».','قبل التسليم قرأ الطلاب فقراتهم وقوّموها بالأداة، ثم عدّلوا ما رأوه ناقصاً.','دوّن على بطاقة الملاحظة: أحد عشر طالباً عدّلوا فقراتهم، وطالبان سألا عن معنى «مكتمل».','صوّر ثلاث فقرات قبل التعديل وبعده، وكتب أن معيار «مكتمل» يحتاج مثالاً.','كتب تقريره في صفحة ونصف وأرفق الصور، ثم رفعه في نمو.']},
+ math:{s:'الرياضيات',who:'أ. سعد، الأول المتوسط، المسائل اللفظية',days:['اختار حصة حل المسائل يوم الأحد، وجهّز نشاط «نجمتان وأمنية» بين الأزواج.','حل الطلاب مسألة، ثم تبادلوا الحلول وكتبوا نجمتين وأمنية على ورقة لاصقة.','لاحظ أن أغلب الأمنيات كانت عامة مثل «رتّب أكثر»، فكتب ذلك في بطاقته.','في الحصة التالية عرض مثالاً لأمنية محددة، فتحسنت التعليقات بوضوح.','كتب في تقريره ما الذي فاجأه، وما الذي سيغيّره في المرة القادمة.']},
+ sci:{s:'العلوم',who:'أ. فهد، الصف السادس، تجربة الذوبان',days:['اختار حصة المختبر يوم الإثنين، وأضاف لأداته معيار «أستطيع أن أشرح كيف وصلت للنتيجة».','وثّقت كل مجموعة مراحل التجربة بصورتين وسجل قصير.','قوّم الطلاب عملهم بالأداة، وكتب كل منهم جملة عن أصعب خطوة.','قارن بين السجلات فوجد أن مجموعتين لم تفسرا النتيجة، فدوّن ذلك.','ربط في تقريره ما رآه بالتقويم التكويني واستقلالية المتعلم، ثم رفعه في نمو.']}};
+const FAC={
+ nomu:{g:'الترحيب، وتعريف المتدربين بالحقيبة، وتقويم معرفتهم القبلية.',s:['رحّب بالمتدربين وعرّف بنفسك وبخبرتك باختصار.','اعرض مراحل الحقيبة: 3 ساعات حضورية، ثم ساعتان عن بعد، ثم 4 ساعات للمهمة في المدرسة، ثم ساعة متزامنة.','وجّههم لفتح نمو: دليل الحقيبة، ثم التقويم القبلي، ثم استبانة TALIS.'],t:'تعرّف على أسماء المتدربين قبل نهاية الجلسة، فهذا يرفع الثقة والتفاعل.'},
+ compass:{g:'تنشيط المعرفة السابقة واستثارة النموذج العقلي عن التعلم النشط.',s:['اعرض السؤال على الشاشة وامنحهم دقيقة صامتة للكتابة.','اطلب من كل متدرب مشاركة زميله ما كتب.','اعرض الجدار، وأبرز أن عناصر التعلم النشط موجودة في صفوفهم أصلاً.'],t:'لا تعلّق على الإجابات بالتقييم. سيعودون إليها في الختام.'},
+ cycle:{g:'فهم دورة التعلم النشط والتمييز بين الاستقصاء وحل المشكلات والمشاريع.',s:['اشرح مراحل الدورة الثلاث: التخطيط، ثم التنفيذ، ثم التقويم الذاتي، وأنها حلقة لا خط مستقيم.','وضّح دور المعلم والطالب في كل مرحلة.','اطلب منهم مطابقة نقطة انطلاق كل مدخل، ثم ناقش الإجابات.'],t:'الفرق الجوهري بين المداخل الثلاثة في نقطة الانطلاق: سؤال، أو مشكلة، أو مشروع.'},
+ notes:{g:'معالجة ما تعلموه واكتشاف الفجوات في الفهم.',s:['دقيقة لكتابة ملخص فردي للأفكار الرئيسة.','يقارن كل متدرب ملخصه بملخص زميله.','عالج سؤالين أو ثلاثة من الأسئلة التي تصلك.'],t:'الأسئلة التي يرسلها المتدربون تظهر لك في أسفل هذه الصفحة.'},
+ strat:{g:'التعرف على استراتيجيات تعاونية وأدوات تقويم تنقل المسؤولية إلى الطالب.',s:['اعرض الاستراتيجيات: تحليل سلالم التقدير، والتوقف المؤقت، وجولة العروض، وجداول الإيجابيات والسلبيات.','اعرض أدوات التقويم الثلاث: تقويم الأقران، وتوثيق التعلم، والتقويم الذاتي.','فعّل اللحظتين التفاعليتين على الجدار.'],t:'شجّعهم على إضافة ما يناسب صفوفهم إلى السلة، فمنها يصوغون أهدافهم.'},
+ tool:{g:'تصميم أداة تقويم ذاتي ونشاط تقويم أقران لمهمة سيدرّسونها قريباً.',s:['اطلب اختيار مهمة استقصاء أو مشروع سيدرّسونها الأسبوع القادم.','35 دقيقة للتصميم: المعايير بلغة الطالب، ثم المقياس، ثم نشاط تقويم الأقران.','تجوّل بين المتدربين وادعم صياغة المعايير.'],t:'أكّد لهم أن هذه الأداة هي مادة مهمة التأمل نفسها.'},
+ gallery:{g:'التعلم من أدوات الزملاء وتقديم تغذية راجعة بنّاءة.',s:['يتجول المتدربون بين أدوات زملائهم.','يتركون نجمتين وأمنية على كل أداة.','يقرأ كل متدرب الملاحظات على أداته، ويحدد فكرة يحتفظ بها وأخرى يحسّنها.'],t:'ركّزهم على ثلاثة أمور: وضوح المعايير، ولغة تناسب الطلاب، وسهولة التطبيق.'},
+ goal:{g:'صياغة هدف شخصي محدد ومرتبط بالحقيبة.',s:['يعود المتدرب إلى إجابته في البوصلة، ويكتب ما تغيّر في تصوره.','يصوغ هدفه بالمُعين في ست خطوات.','يعرض هدفه على زميله ليراجعه بثلاثة أسئلة.'],t:'تابع الأهداف لحظياً من تبويب «الأهداف»، وأرسل ملاحظة لمن يحتاج تحسيناً قبل أن يغادر.'},
+ task:{g:'فهم مهمة التأمل والخروج بخطة تنفيذ واضحة.',s:['اعرض المهمة في جملة واحدة، ثم بطاقة «ما هي وما ليست».','يقرأ المتدربون مثالاً لمعلم نفّذها في مادتهم.','يكملون بطاقة الخطة، ثم يشرحونها لزميل في 30 ثانية.'],t:'المهلة خمسة أيام دراسية، والرفع في نمو. ذكّرهم أن الإخفاق في التجربة مقبول.'}};
+const TQ=[['لماذا اخترت هذا الهدف؟ وكيف يرتبط بفكرة من الحقيبة؟','المواءمة مع الأهداف'],['ماذا فعلت في الحصة؟ وكيف قدّمت الأداة لطلابك؟','وصف المهمة'],['ماذا رأيت وسمعت؟ اذكر أدلتك.','جمع الأدلة'],['إلى أي حد تحقق هدفك؟ ولماذا تقول ذلك؟','التقويم الذاتي في ضوء الأدلة'],['ما الذي نجح وما الذي لم ينجح، ولماذا؟ وما علاقته بمفاهيم الحقيبة مثل التقويم التكويني واستقلالية المتعلم؟','التأمل النقدي'],['ماذا ستغيّر في المرة القادمة؟','الخطوات التالية']];
+const SHORT={nomu:'نمو',compass:'البوصلة',cycle:'الدورة',notes:'التدوين',strat:'الاستراتيجيات',tool:'الأداة',gallery:'جولة العروض',goal:'الهدف',task:'المهمة'};
+
+/* ===== الاتصال بقاعدة البيانات ===== */
+const CFG={url:'https://voqwmghwpfmdkftsdagr.supabase.co',key:'sb_publishable_Nf9s57zxPNV9o_O_iYsGXQ_3w6qY-B4'};
+const PK=PACK.id;
+async function rpc(fn,args){
+ const r=await fetch(CFG.url+'/rest/v1/rpc/'+fn,{method:'POST',headers:{apikey:CFG.key,'Content-Type':'application/json'},body:JSON.stringify(args||{})});
+ const t=await r.text();if(!r.ok)throw new Error(t||r.status);return t?JSON.parse(t):null;
+}
+const LS={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+
+const app=document.getElementById('app');
+const h=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const actBy=id=>ACTS.find(a=>a.id===id)||ACTS[0];
+const toast=m=>{document.querySelectorAll('.toast').forEach(x=>x.remove());const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)};
+const typing=()=>{const a=document.activeElement;return a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName)};
+const fmt=ms=>{const s=Math.ceil(ms/1000);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
+const left=()=>S.timerEnd?Math.max(0,new Date(S.timerEnd)-Date.now()):0;
+const BASE=location.origin+location.pathname;
+
+const RIP=`<svg class="rip drop" viewBox="0 0 340 340" aria-hidden="true"><g fill="none" stroke="#7fd6d1" stroke-width="2"><circle class="r" cx="170" cy="170" r="150"/><circle class="r" cx="170" cy="170" r="150"/><circle class="r" cx="170" cy="170" r="150"/></g><circle cx="170" cy="170" r="10" fill="#f2785c"/></svg>`;
+const LOGO=`<span class="logo"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="none" stroke="#7fd6d1" stroke-width="2" opacity=".5"/><circle cx="20" cy="20" r="11" fill="none" stroke="#7fd6d1" stroke-width="2"/><path d="M20 8c4 6 6 9 6 12a6 6 0 0 1-12 0c0-3 2-6 6-12z" fill="#f2785c"/></svg>منصة تأمل</span>`;
+const ICON={
+ home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg>',
+ bk:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9h18l-2 11H5z"/><path d="M8 9l4-6 4 6"/></svg>',
+ goal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>',
+ task:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c4 6 6 9 6 12a6 6 0 0 1-12 0c0-3 2-6 6-12z"/></svg>'};
+const FOOT='<div class="foot">منصة تأمل: أداة تدريبية داعمة من إعداد د. عبدالله البقيلي</div>';
+
+/* ===== الحالة ===== */
+const blank=()=>({done:{},nomu:{},basket:[],compass:{txt:'',share:true,sent:false,after:'',pid:null},cycle:{a:{},checked:false},
+ notes:{mine:'',sent:false,verdict:'',q:'',qsent:false},tool:{task:'',type:'',crit:[],custom:'',scale:'three',peer:'',pub:false},keep:'',improve:'',
+ goal:{st:0,challenge:'',concept:'',cls:'',change:'',evidence:'',text:'',peer:{},final:false},
+ task:{story:'ar',cls:'',date:'',ev:[],teach:false,ready:false,check:{},status:'لم يخطط'}});
+const S={mode:'teacher',tv:'loading',act:null,me:null,d:blank(),obs:LS.get('taamul-obs',{did:'',said:'',surp:''}),
+ live:'nomu',timerEnd:null,note:null,editing:{},gal:null,recv:null,
+ tr:{key:LS.get('taamul-trkey',''),cohort:LS.get('taamul-trcoh',1),tab:'session',dash:null,filter:'all',sort:'name',add:5,lastGen:[],log:null,ed:null,mv:null}};
+
+/* ===== حفظ تقدم المعلم ===== */
+let saveT=null,saving=false;
+function save(){if(!S.me)return;LS.set('taamul-d-'+S.me.code,S.d);clearTimeout(saveT);saveT=setTimeout(push,700)}
+async function push(){if(saving){save();return}saving=true;try{await rpc('t_save',{p_code:S.me.code,p_pack:PK,p_data:S.d});setNet(true)}catch(e){setNet(false);clearTimeout(saveT);saveT=setTimeout(push,5000)}saving=false}
+function saveNow(){if(!S.me)return;LS.set('taamul-d-'+S.me.code,S.d);clearTimeout(saveT);return push()}
+function setNet(ok){const n=document.getElementById('net');if(n)n.hidden=ok}
+
+/* ===== جودة الهدف ===== */
+function quality(g){
+ const t=(g.text||'').trim();
+ const pack=!!g.concept||/سلم|نجمتان|التوقف|توثيق|جولة|استقصاء|مشروع|مشكلة|تقويم ذاتي|تقويم الأقران|التدوين/.test(t);
+ const where=!!(g.cls&&g.cls.trim())||/حصة|الصف|المتوسط|الثانوي|الابتدائي/.test(t);
+ const ev=!!(g.evidence&&g.evidence.trim())||/سأعرف|عندما|سأقارن|من جودة|من خلال/.test(t);
+ return {pack,where,ev,score:[pack,where,ev].filter(Boolean).length,empty:!t};
+}
+const qChips=q=>q.empty?'<span class="chip">لم يُكتب بعد</span>':`<span class="chip ${q.pack?'ok':'cor'}">${q.pack?'✓':'✗'} مرتبط بالحقيبة</span> <span class="chip ${q.where?'ok':'cor'}">${q.where?'✓':'✗'} في صف محدد</span> <span class="chip ${q.ev?'ok':'cor'}">${q.ev?'✓':'✗'} له دليل</span>`;
+function goalSentence(g){
+ if(!g.cls&&!g.concept&&!g.change)return '';
+ return `في ${g.cls||'…'}، سأجرّب ${g.concept?'«'+g.concept+'»':'…'}${g.change?' بأن '+g.change:''}${g.challenge?' لأعالج أن '+g.challenge:''}، وسأعرف أنه نجح من خلال ${g.evidence||'…'}.`;
+}
+const inBasket=c=>S.d.basket.includes(c);
+const basketBtn=c=>`<button class="btn sm ${inBasket(c)?'on':''}" data-bk="${h(c)}">${inBasket(c)?'في سلتي ✓':'+ أضف لسلتي'}</button>`;
+
+/* ===== التوجيه ===== */
+function R(){
+ if(S.mode==='trainer')return S.tr.key&&S.tr.dash?trainer():trLogin();
+ if(S.mode==='screen')return screen();
+ return teacher();
+}
+
+/* ===== المعلم ===== */
+function teacher(){
+ if(S.tv==='loading'){app.innerHTML=`<div class="band" style="min-height:100%">${RIP}<div class="wrap"><div class="top">${LOGO}</div><div class="hero"><h1>لحظة من فضلك…</h1></div></div></div>`;return}
+ if(S.tv==='scan')return scanView();
+ if(S.tv==='welcome')return welcomeView();
+ let body='';
+ if(S.tv==='paths')body=pathsView();
+ else if(S.tv==='home')body=homeView();
+ else if(S.tv==='act')body=actView();
+ else if(S.tv==='basket')body=basketView();
+ else if(S.tv==='goalv')body=myGoalView();
+ else if(S.tv==='mytask')body=myTaskView();
+ const tab=(v,ic,l,b)=>`<button class="${S.tv===v||(v==='paths'&&['home','act'].includes(S.tv))?'on':''}" data-tv="${v}">${ICON[ic]}${l}${b?`<span class="badge">${b}</span>`:''}</button>`;
+ app.innerHTML=`<div id="lb">${liveBar()}</div><div id="net" class="proto" hidden>لا يوجد اتصال الآن. ما تكتبه محفوظ على جهازك وسيُرسل تلقائياً.</div>`+body+FOOT+`<nav class="nav">${tab('paths','home','الرئيسية')}${tab('basket','bk','سلتي',S.d.basket.length||'')}${tab('goalv','goal','هدفي')}${tab('mytask','task','مهمتي')}</nav>`;
+ afterRender();
+}
+function liveBar(){return S.live&&!(S.tv==='act'&&S.act===S.live)&&S.tv!=='mytask'?`<div class="live-bar"><span>المدرب الآن في: <b>${h(actBy(S.live).t)}</b></span><button class="btn sm" data-open="${S.live}">انتقل</button></div>`:''}
+function scanView(err){
+ app.innerHTML=`<div class="band">${RIP}<div class="wrap"><div class="top">${LOGO}</div><div class="hero"><h1>أهلاً بك</h1><p>امسح رمز QR في بطاقتك بكاميرا الجوال، أو اكتب الرمز المطبوع تحته.</p></div></div></div>
+ <div class="wrap stack" style="padding-block:22px"><div class="card"><label for="code">رمز البطاقة</label><input id="code" type="text" dir="ltr" maxlength="6" autocomplete="off" autocapitalize="characters" style="font-family:'Readex Pro';font-size:24px;letter-spacing:.2em;text-align:center"><p class="muted" id="scanerr">${err||'خمسة أحرف وأرقام مطبوعة على بطاقتك.'}</p><button class="btn pri" style="width:100%" data-scan>دخول</button></div></div>${FOOT}`;
+}
+function welcomeView(){
+ const m=S.me;
+ app.innerHTML=`<div class="band" style="min-height:100%">${RIP}<div class="wrap"><div class="top">${LOGO}<span class="chip">${h(m.cohort_name)}</span></div><div class="hero" style="padding-top:30px"><h1>مرحباً أستاذي الفاضل</h1><p>حيّاك الله في حقيبة «${PACK.name}». اكتب اسمك لنبدأ، ولن نطلب منك شيئاً آخر.</p>
+ <div class="card" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18);margin-top:18px"><label for="nm" style="color:#fff">اسمك كما تحب أن يُنادى</label><input id="nm" type="text" placeholder="مثال: خالد الزهراني" autocomplete="name"><button class="btn pri" style="width:100%;margin-top:12px" data-start>ابدأ</button><p class="soft" style="font-size:13px;margin-top:10px">احتفظ ببطاقتك، فهي مفتاحك في الحقائب الثلاث. هذا الجهاز سيتذكرك.</p></div>
+ ${m.wa?`<p style="margin-top:16px"><a href="${h(m.wa)}" target="_blank" rel="noopener">انضم إلى مجموعة الواتساب الخاصة بالمجموعة</a></p>`:''}</div></div></div>`;
+}
+const PROGS=[
+ {id:'al',n:'تطوير مهارات التعلم النشط بثقة',d:'30 نوفمبر – 3 ديسمبر',open:true},
+ {id:'pk',n:'المعرفة التربوية المتكاملة',d:'قرابة 14 – 17 ديسمبر',open:false},
+ {id:'cd',n:'التصميم التعاوني وأشكال التدريس التشاركي',d:'قرابة 28 – 31 ديسمبر',open:false}];
+function progOf(id){if(id!==PK)return 0;return Math.round(ACTS.filter(a=>S.d.done[a.id]).length/ACTS.length*100)}
+function ring(p,col){const r=26,c=2*Math.PI*r;return `<svg viewBox="0 0 64 64" width="72" height="72" aria-hidden="true"><circle cx="32" cy="32" r="${r}" fill="none" stroke="var(--line)" stroke-width="7"/><circle cx="32" cy="32" r="${r}" fill="none" stroke="${col}" stroke-width="7" stroke-linecap="round" stroke-dasharray="${c*p/100} ${c}" transform="rotate(-90 32 32)"/><text x="32" y="37" text-anchor="middle" font-size="15" font-weight="700" fill="var(--ink)" font-family="Readex Pro">${p}%</text></svg>`}
+function pathsView(){
+ const first=(S.me.name||'').split(' ')[0];const tot=Math.round(PROGS.reduce((a,p)=>a+progOf(p.id),0)/PROGS.length);
+ return `<div class="band">${RIP}<div class="wrap"><div class="top">${LOGO}<span class="chip">${h(S.me.cohort_name)}</span></div><div class="hero"><h1>برامجي يا أ. ${h(first)}</h1><p>مسارك ثلاثة برامج متتالية. اختر البرنامج الذي تريد الدخول إليه.</p>
+ <div style="margin-top:14px"><div class="row sp soft" style="font-size:14px"><span>إنجازك في المسار كاملاً</span><b style="color:#fff">${tot}%</b></div><div class="bar" style="background:rgba(255,255,255,.2);margin-top:6px"><span style="width:${tot}%;background:#f2785c"></span></div></div></div></div></div>
+ <div class="wrap stack" style="padding-block:18px">${PROGS.map((p,i)=>{const pr=progOf(p.id);
+ const goal=p.id===PK&&S.d.goal.final?`<p class="muted" style="margin-top:6px">هدفي: ${h(S.d.goal.text)}</p>`:'';
+ const st=p.open?(pr===100?'<span class="chip ok">مكتمل ✓</span>':pr>0?'<span class="chip cor">جارٍ الآن</span>':'<span class="chip">متاح</span>'):'<span class="chip">يُفتح قريباً</span>';
+ return `<div class="card white" style="${p.open?'':'opacity:.75'}"><div style="display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center">${ring(pr,p.open?'var(--lagoon)':'var(--line)')}<div><span class="muted">البرنامج ${i+1} · ${p.d}</span><h3>${h(p.n)}</h3><div class="row" style="margin-top:6px">${st}${p.id===PK&&S.d.task.status!=='لم يخطط'?`<span class="chip">مهمة التأمل: ${h(S.d.task.status)}</span>`:''}</div>${goal}</div></div>
+ ${p.open?`<button class="btn pri" style="width:100%;margin-top:12px" data-tv="home">${pr>0?'أكمل البرنامج':'ادخل البرنامج'} ←</button>`:'<p class="muted" style="margin-top:10px">يُفتح في موعد جلسته الحضورية، وستجد فيه هدفك السابق لتبني عليه.</p>'}</div>`}).join('')}</div>`;
+}
+function homeView(){
+ const done=ACTS.filter(a=>S.d.done[a.id]).length;const first=(S.me.name||'').split(' ')[0];
+ return `<div class="band">${RIP}<div class="wrap"><div class="top">${LOGO}<button class="btn sm" data-tv="paths" style="background:transparent;color:#fff;border-color:rgba(255,255,255,.4)">→ برامجي</button></div><div class="hero"><p class="soft" style="margin:0">${h(PACK.name)}</p><h1>أهلاً أ. ${h(first)}</h1><p>تنقّل بين الأنشطة بحرية، والشريط البرتقالي يخبرك أين وصل المدرب.</p><div class="row" style="margin-top:10px"><span class="chip">أنجزت ${done} من ${ACTS.length}</span><span class="chip">في سلتك ${S.d.basket.length} أفكار</span></div></div></div></div>
+ <div class="wrap" style="padding-block:18px"><div class="acts">${ACTS.map((a,i)=>`<button class="act ${S.d.done[a.id]?'done':''} ${S.live===a.id?'live':''}" data-open="${a.id}"><span class="dot">${S.d.done[a.id]?'✓':i+1}</span><span><b>${h(a.t)}</b><span class="muted">${h(a.d)}</span></span><span class="muted" style="white-space:nowrap">${a.min} د</span></button>`).join('')}</div></div>`;
+}
+function head(a){return `<div class="wrap" style="padding-top:8px"><button class="back" data-tv="home">→ الجلسة</button><div class="row sp" style="margin:4px 0 12px"><h2>${h(a.t)}</h2><span class="row"><span class="chip">${h(a.mode)}</span><span class="chip">${a.min} د</span></span></div>`}
+const doneBtn=id=>{const i=ACTS.findIndex(a=>a.id===id);const nx=ACTS[i+1];const d=S.d.done[id];
+ const lbl=nx?`التالي: ${h(nx.t)} ←`:'إلى «مهمتي» ←';
+ return `<div class="card" style="margin:24px 0 8px;display:grid;gap:10px">${d?'<span class="chip ok" style="justify-self:start">أنجزت هذا النشاط ✓</span>':''}
+ <button class="btn pri" style="width:100%" data-next="${id}">${d?lbl:'أنجزت، '+lbl}</button><button class="back" style="justify-self:center" data-tv="home">العودة إلى قائمة الجلسة</button></div>`};
+function actView(){const a=actBy(S.act);return head(a)+({nomu:aNomu,compass:aCompass,cycle:aCycle,notes:aNotes,strat:aStrat,tool:aTool,gallery:aGallery,goal:aGoal,task:aTask}[a.id])(a)+'</div>'}
+function aNomu(){
+ const it=[['guide','اطلعت على دليل الحقيبة ومخرجاتها'],['pre','أجبت عن التقويم القبلي'],['talis','أجبت عن استبانة TALIS']];
+ return `<p>هذه الخطوات رسمية وتتم في حسابك على منصة نمو. افتح نمو، ثم عد إلى هنا وعلّم ما أنجزته.</p><div class="opts">${it.map(([k,t])=>`<button class="opt ${S.d.nomu[k]?'on':''}" data-nomu="${k}"><span class="box">${S.d.nomu[k]?'✓':''}</span><span>${t}</span></button>`).join('')}</div>${doneBtn('nomu')}`;
+}
+const wallHtml=(list,empty)=>list&&list.length?list.map(w=>`<div class="note ${w.mine?'mine':''}">${h(w.body)}${w.mine?'<small>أنت</small>':''}</div>`).join(''):`<p class="muted">${empty||'لا مشاركات بعد. ستظهر مشاركات زملائك هنا تلقائياً.'}</p>`;
+function aCompass(){
+ const c=S.d.compass;
+ if(!c.sent)return `<div class="reflect"><p>عندما تسمع «التعلم النشط»، ماذا يحدث في صفك فعلاً؟ صف ما يفعله طلابك، لا ما تقدمه أنت.</p></div>
+ <p class="muted" style="margin-top:12px">لا توجد إجابة خاطئة. اكتب أول ما يخطر لك خلال دقيقة واحدة.</p>
+ <div class="row sp"><span class="tmr" id="mini">01:00</span><button class="btn sm" data-mini>ابدأ الدقيقة</button></div>
+ <textarea id="cmp" data-bind="compass.txt" placeholder="مثال: أغلب الحصة شرح مني، ثم أسئلة سريعة يجيب عنها نفس الطلاب">${h(c.txt)}</textarea>
+ <button class="opt ${c.share?'on':''}" data-tog="compass.share" style="margin-top:10px"><span class="box">${c.share?'✓':''}</span><span>اعرض إجابتي على الجدار دون اسمي</span></button>
+ <button class="btn pri" style="width:100%;margin-top:12px" data-csend>أرسل</button>`;
+ return `<div class="card"><p class="muted">إجابتك</p><p>${h(c.txt)}</p><p class="muted">ستعود إليها في نهاية الجلسة لترى ما الذي تغيّر.</p><button class="btn sm" style="margin-top:8px" data-edit="compass">عدّل إجابتي</button></div>
+ <div class="sec-h"><span class="num">2</span><h3>شارك زميلك</h3></div><p>اقرأ إجابة زميلك ثم تحدثا دقيقة: ما المشترك بينكما؟</p><div id="peer" data-peer="compass.txt"><p class="muted">جارٍ البحث عن إجابة زميل…</p></div>
+ <div class="sec-h"><span class="num">3</span><h3>الجدار</h3></div><div class="wall" id="w-compass" data-wl="compass"><p class="muted">جارٍ التحميل…</p></div>${doneBtn('compass')}`;
+}
+function aCycle(){
+ const A=[['inq','التعلم القائم على الاستقصاء','q'],['prob','التعلم القائم على حل المشكلات','p'],['proj','التعلم القائم على المشاريع','r']];
+ const O={q:'سؤال يثير الفضول',p:'مشكلة واقعية معقدة',r:'منتج نهائي يُعرض على جمهور'};
+ const why={inq:'يبدأ بسؤال، ويركز على عملية التفكير أكثر من الناتج.',prob:'يبدأ بمشكلة ليس لها حل بسيط، فيحللها الطلاب ويبررون حلولهم.',proj:'يمتد زمنياً ويجمع الاستقصاء والتعاون، وينتهي بمنتج له جمهور.'};
+ const cy=S.d.cycle;
+ return `<p>المداخل الثلاثة تشترك في الهدف: أن يفكر الطالب ويستكشف ويتعاون. ويختلف كل منها في <b>نقطة الانطلاق</b>. اختر نقطة انطلاق كل مدخل.</p>
+ <div class="stack" style="margin-top:12px">${A.map(([k,t,ans])=>{const v=cy.a[k]||'';const ok=cy.checked&&v===ans;
+ return `<div class="card white"><div class="row sp"><b>${t}</b>${cy.checked?`<span class="chip ${ok?'ok':'cor'}">${ok?'صحيح':'راجعها'}</span>`:''}</div>
+ <div class="q" style="margin-top:8px">${Object.entries(O).map(([o,l])=>`<button class="btn sm ${v===o?'on':''}" data-cyc="${k}:${o}">${l}</button>`).join('')}</div>
+ ${cy.checked?`<p class="muted" style="margin-top:8px">${why[k]}</p><div style="margin-top:6px">${basketBtn(t)}</div>`:''}</div>`}).join('')}</div>
+ ${cy.checked?'':'<button class="btn pri" style="width:100%;margin-top:12px" data-ccheck>تحقق</button>'}
+ <div class="card" style="margin-top:16px"><b>الدورة ليست خطاً مستقيماً</b><p class="muted">التخطيط يقوده المعلم مع صوت الطلاب، والتنفيذ يقوم فيه الطالب بالجهد الذهني والمعلم ميسّر، والتقويم الذاتي يعود فيه الطالب فاعلاً رئيساً. ثم تبدأ الدورة من جديد بفهم أعمق.</p></div>${doneBtn('cycle')}`;
+}
+function aNotes(){
+ const n=S.d.notes;
+ if(!n.sent)return `<p>توقف لحظة. اكتب في دقيقة واحدة أهم ما تعلمته حتى الآن: أفكار رئيسة لا تفاصيل.</p><textarea id="nt" data-bind="notes.mine" placeholder="نقاط قصيرة تكفي">${h(n.mine)}</textarea><button class="btn pri" style="width:100%;margin-top:12px" data-nsend>أرسل ثم قارن بزميلك</button>`;
+ const V=['سجلنا الأفكار نفسها','زميلي انتبه لشيء فاتني','نفسّر المفهوم بطريقتين مختلفتين'];
+ return `<div class="split"><div class="card"><p class="muted">ملخصك</p><p>${h(n.mine)}</p><button class="btn sm" style="margin-top:8px" data-edit="notes">عدّل ملخصي</button></div><div id="peer" data-peer="notes.mine"><p class="muted">جارٍ البحث عن ملخص زميل…</p></div></div>
+ <p style="margin-top:14px"><b>بعد المقارنة، ماذا وجدتما؟</b></p><div class="opts">${V.map(v=>`<button class="opt ${n.verdict===v?'on':''}" data-nv="${h(v)}"><span class="box">${n.verdict===v?'✓':''}</span><span>${v}</span></button>`).join('')}</div>
+ <label for="nq" style="margin-top:14px">سؤال للمدرب (اختياري)</label><textarea id="nq" data-bind="notes.q" placeholder="ما الذي بقي غير واضح؟">${h(n.q)}</textarea>
+ <button class="btn sm" style="margin-top:8px" data-nq>${n.qsent?'أرسل السؤال بعد التعديل':'أرسل السؤال'}</button>${n.qsent?' <span class="chip ok">وصل سؤالك للمدرب ✓</span>':''}${doneBtn('notes')}`;
+}
+function wallBlock(key,n,title,ph){
+ return `<div class="sec-h"><span class="num">${n}</span><h3>${title}</h3></div><div class="row" style="flex-wrap:nowrap"><input type="text" id="in-${key}" placeholder="${ph}" maxlength="300"><button class="btn sec" data-wall="${key}">${S.editing[key]?'حفظ التعديل':'انشر'}</button></div>
+ <div class="wall" style="margin-top:10px" id="w-${key}" data-wl="${key}" data-edit-own="1"><p class="muted">جارٍ التحميل…</p></div>`;
+}
+function aStrat(){
+ return `<p>استراتيجيات سهلة التطبيق تنقل المسؤولية من المعلم إلى الطالب. أضف لسلتك ما ترى أنه يناسب صفك، فستختار منها هدفك في آخر الجلسة.</p>
+ <div class="stack" style="margin-top:12px">${STRATS.map(([t,d])=>`<div class="card white"><div class="row sp"><b>${t}</b>${basketBtn(t)}</div><p class="muted">${d}</p></div>`).join('')}</div>
+ <h3 style="margin-top:24px">لحظتان تفاعليتان</h3>${wallBlock('peer',1,'فائدة واحدة لتقويم الأقران في تخصصك','اكتب فائدة واحدة')}${wallBlock('doc',2,'كيف سيوثق طلابك تعلمهم الأسبوع القادم؟','فكرة واحدة ستجربها')}${doneBtn('strat')}`;
+}
+function aTool(){
+ const t=S.d.tool;const all=t.crit.concat(t.custom.trim()?[t.custom.trim()]:[]).slice(0,5);const sc=SCALES[t.scale];
+ return `<div class="card" style="background:var(--coralbg);border-color:transparent"><b>ما تصممه الآن هو ما ستطبقه في مهمة التأمل.</b><p class="muted">اختر مهمة ستدرّسها قريباً، ويفضّل في الأسبوع القادم.</p></div>
+ <div class="sec-h"><span class="num">1</span><h3>المهمة</h3></div><input type="text" id="tt" data-bind="tool.task" placeholder="مثال: تجربة الذوبان، الصف السادس" value="${h(t.task)}">
+ <div class="q" style="margin-top:8px">${['تجربة علمية','مسألة جماعية','مشروع كتابي','تحدٍّ تصميمي','بحث قصير'].map(x=>`<button class="btn sm ${t.type===x?'on':''}" data-ttype="${x}">${x}</button>`).join('')}</div>
+ <div class="sec-h"><span class="num">2</span><h3>المعايير بلغة الطالب</h3></div><p class="muted">اختر من ثلاثة إلى خمسة. المعيار يصف شكل التعلم الجيد.</p>
+ <div class="opts">${CRIT.map(c=>{const on=t.crit.includes(c);return `<button class="opt ${on?'on':''}" data-crit="${h(c)}"><span class="box">${on?'✓':''}</span><span>${c}</span></button>`}).join('')}</div>
+ <label for="tc" style="margin-top:10px">معيار من صياغتك</label><input type="text" id="tc" data-bind="tool.custom" placeholder="أكتبه كما سيقرؤه طالبك" value="${h(t.custom)}">
+ <div class="sec-h"><span class="num">3</span><h3>المقياس</h3></div><div class="q">${Object.keys(SCALES).map(k=>`<button class="btn sm ${t.scale===k?'on':''}" data-scale="${k}">${SCALEN[k]}</button>`).join('')}</div>
+ <div class="sec-h"><span class="num">4</span><h3>نشاط تقويم الأقران المرافق</h3></div><div class="q">${['نجمتان وأمنية','قائمة تحقق سريعة','لحظة تأمل جماعي'].map(x=>`<button class="btn sm ${t.peer===x?'on':''}" data-tpeer="${x}">${x}</button>`).join('')}</div>
+ <div class="sec-h"><span class="num">5</span><h3>هكذا سيراها طالبك</h3></div>
+ <div class="card white"><b>كيف كان عملي اليوم؟</b><p class="muted">${h(t.task||'اسم المهمة')}</p><div class="scroll"><table class="tbl"><thead><tr><th>المعيار</th>${sc.map(s=>`<th>${s}</th>`).join('')}</tr></thead><tbody>${(all.length?all:['اختر معاييرك من الأعلى']).map(c=>`<tr><td>${h(c)}</td>${sc.map(()=>'<td>○</td>').join('')}</tr>`).join('')}</tbody></table></div>${t.peer?`<p class="muted" style="margin-top:8px">ثم: ${h(t.peer)} مع زميل.</p>`:''}</div>
+ ${t.pub?'<p style="margin-top:14px"><span class="chip ok">نُشرت أداتك في جولة العروض ✓</span></p><p class="muted">يمكنك تعديل أداتك في أي وقت، وتظهر التعديلات لزملائك تلقائياً.</p>':`<button class="btn pri" style="width:100%;margin-top:14px" data-tpub ${all.length<3||!t.task?'disabled':''}>انشر أداتي في جولة العروض</button><p class="muted">يُفعَّل النشر بعد كتابة المهمة واختيار ثلاثة معايير على الأقل.</p>`}${doneBtn('tool')}`;
+}
+function toolCrit(t){return (t.crit||[]).concat(t.custom&&t.custom.trim()?[t.custom.trim()]:[]).slice(0,5)}
+function aGallery(){
+ return `<p>تجول بين أدوات زملائك. ركّز على: وضوح المعايير، ولغة تناسب الطلاب، وسهولة التطبيق في الصف. اترك نجمتين وأمنية.</p>
+ <div class="row sp" style="margin-top:8px"><span class="muted" id="galn"></span><button class="btn sm" data-galr>تحديث</button></div>
+ <div class="stack" style="margin-top:10px" id="gal">${galHtml()}</div>
+ <div class="sec-h"><span class="num">✓</span><h3>ما كتبه زملاؤك على أداتك</h3></div><div id="recv">${recvHtml()}</div>${doneBtn('gallery')}`;
+}
+function galHtml(){
+ if(!S.gal)return '<p class="muted">جارٍ التحميل…</p>';
+ if(!S.gal.length)return '<div class="card"><p>لم ينشر زملاؤك أدواتهم بعد.</p><p class="muted">ستظهر الأدوات هنا عندما ينشرونها. اضغط «تحديث» بعد قليل.</p></div>';
+ return S.gal.map(g=>{const t=g.tool||{};const gv=g.given;const ed=S.editing['g'+g.code];
+ return `<div class="card white"><div class="row sp"><b>${h(t.task||'')}</b><span class="muted">أ. ${h((g.name||'').split(' ')[0])}</span></div><ul style="margin:8px 0;padding-inline-start:20px">${toolCrit(t).map(c=>`<li>${h(c)}</li>`).join('')}</ul><p class="muted">المقياس: ${SCALEN[t.scale]||''}${t.peer?' · تقويم الأقران: '+h(t.peer):''}</p>
+ ${gv&&!ed?`<div class="note mine" style="margin-top:8px">★ ${h(gv.a)}${gv.b?'<br>★ '+h(gv.b):''}<br>✦ ${h(gv.c)}<small>ملاحظتك</small></div><button class="btn sm" style="margin-top:8px" data-gedit="${g.code}">عدّل ملاحظتي</button>`:
+ `<div class="stack" style="margin-top:8px"><input type="text" id="g${g.code}a" placeholder="نجمة: ما الذي أعجبك؟" value="${h(gv?.a)}"><input type="text" id="g${g.code}b" placeholder="نجمة ثانية" value="${h(gv?.b)}"><input type="text" id="g${g.code}c" placeholder="أمنية: اقتراح واحد للتحسين" value="${h(gv?.c)}"><button class="btn sec sm" data-give="${g.code}">أرسل</button></div>`}</div>`}).join('');
+}
+function recvHtml(){
+ if(!S.d.tool.pub)return '<p class="muted">انشر أداتك أولاً من نشاط «صمّم أداة تقويمك الذاتي» لتصلك ملاحظات زملائك.</p>';
+ if(!S.recv)return '<p class="muted">جارٍ التحميل…</p>';
+ return (S.recv.length?S.recv.map(r=>`<div class="card" style="margin-bottom:10px"><p>★ ${h(r.s1)}</p>${r.s2?`<p>★ ${h(r.s2)}</p>`:''}<p>✦ ${h(r.w)}</p><small class="muted">أ. ${h((r.from||'').split(' ')[0])}</small></div>`).join(''):'<p class="muted">لم تصلك ملاحظات بعد. ستظهر هنا تلقائياً.</p>')
+ +`<label for="kp">فكرة سأحتفظ بها</label><input type="text" id="kp" data-bind="keep" value="${h(S.d.keep)}"><label for="im" style="margin-top:10px">فكرة سأحسّن بها أداتي</label><input type="text" id="im" data-bind="improve" value="${h(S.d.improve)}">`;
+}
+function aGoal(){
+ const g=S.d.goal;const st=g.st;
+ const steps=`<div class="steps">${[0,1,2,3,4,5].map(i=>`<i class="${i<=st?'on':''}"></i>`).join('')}</div>`;
+ const nav=(n,ok=true)=>`<div class="row sp" style="margin-top:16px">${st>0?'<button class="btn" data-gst="-1">السابق</button>':'<span></span>'}<button class="btn pri" data-gst="1" ${ok?'':'disabled'}>${n||'التالي'}</button></div>`;
+ const opt=(f,c)=>`<button class="opt ${g[f]===c?'on':''}" data-gset="${f}:${h(c)}"><span class="box">${g[f]===c?'✓':''}</span><span>${h(c)}</span></button>`;
+ let b='';
+ if(st===0)b=`<h3>من أين بدأت؟</h3><p class="muted">هذا ما كتبته في بوصلة اليوم:</p><div class="reflect"><p>${h(S.d.compass.txt||'لم تكتب في البوصلة بعد. يمكنك العودة إليها من صفحة الجلسة.')}</p></div><label for="ca" style="margin-top:14px">بعد هذه الجلسة، ما الذي تغيّر في تصورك؟</label><textarea id="ca" data-bind="compass.after" placeholder="مثال: أدركت أن طلابي لا يعرفون معايير الجودة، فهم ينتظرون حكمي">${h(S.d.compass.after)}</textarea>${nav()}`;
+ if(st===1)b=`<h3>ما التحدي الذي تريد معالجته؟</h3><p class="muted">اختر أقرب تحدٍ لصفك، أو اكتب تحدّيك.</p><div class="opts">${CHALL.map(c=>opt('challenge',c)).join('')}</div><input type="text" id="gch" data-bind="goal.challenge" style="margin-top:10px" placeholder="أو اكتب تحدّيك" value="${CHALL.includes(g.challenge)?'':h(g.challenge)}">${nav('',!!g.challenge)}`;
+ if(st===2){const mine=S.d.basket;const rest=CONCEPTS.filter(c=>!mine.includes(c));
+ b=`<h3>أي فكرة من الحقيبة ستجربها؟</h3>${mine.length?`<p class="muted">من سلتك</p><div class="opts">${mine.map(c=>opt('concept',c)).join('')}</div>`:'<p class="muted">سلتك فارغة، اختر من أفكار الحقيبة:</p>'}
+ <details style="margin-top:10px" ${mine.length?'':'open'}><summary class="muted" style="cursor:pointer">أفكار أخرى من الحقيبة</summary><div class="opts" style="margin-top:8px">${rest.map(c=>opt('concept',c)).join('')}</div></details>${nav('',!!g.concept)}`}
+ if(st===3)b=`<h3>أين ومتى، وماذا ستفعل تحديداً؟</h3><label for="gcl">الحصة والصف</label><input type="text" id="gcl" data-bind="goal.cls" placeholder="مثال: حصة التعبير للصف الخامس" value="${h(g.cls)}"><label for="gcg" style="margin-top:10px">ما الذي ستفعله؟ (جملة واحدة)</label><input type="text" id="gcg" data-bind="goal.change" placeholder="مثال: أطلب من الطلاب تقويم فقراتهم بالسلم قبل التسليم" value="${h(g.change)}">${nav('',true)}`;
+ if(st===4)b=`<h3>كيف ستعرف أنه نجح؟</h3><p class="muted">هذا هو الدليل الذي ستجمعه في مهمة التأمل.</p><div class="opts">${EVID.map(c=>opt('evidence',c)).join('')}</div><input type="text" id="gev" data-bind="goal.evidence" style="margin-top:10px" placeholder="أو اكتب دليلك" value="${EVID.includes(g.evidence)?'':h(g.evidence)}">${nav('صُغ هدفي',!!g.evidence)}`;
+ if(st===5){if(!g.text)g.text=goalSentence(g);const q=quality(g);
+ b=`<h3>هدفك الشخصي</h3><p class="muted">هذه مسودة مبنية على إجاباتك. عدّلها بكلماتك حتى تشعر أنها هدفك أنت.</p>
+ <div class="reflect"><p id="gtx">${h(g.text)}</p><p class="mirror" aria-hidden="true">${h(g.text)}</p></div>
+ <textarea id="gtxt" data-bind="goal.text" style="margin-top:10px">${h(g.text)}</textarea>
+ <div class="row" style="margin-top:8px" id="gq">${qChips(q)}</div>
+ <details style="margin-top:12px"><summary class="muted" style="cursor:pointer">أمثلة: هدف ضعيف وهدف قوي</summary><div class="stack" style="margin-top:8px"><div class="ex bad">أطور مهاراتي في التعلم النشط.<br><small class="muted">عام، لا صف ولا فكرة من الحقيبة ولا دليل.</small></div><div class="ex good">في حصة التعبير للصف الخامس سأجرّب سلم تقويم ذاتي بثلاثة معايير، وسأعرف أنه نجح عندما يعدّل نصف الطلاب فقراتهم بناءً عليه.<br><small class="muted">لغة عربية</small></div><div class="ex good">في المسائل اللفظية للأول المتوسط سأستخدم «نجمتان وأمنية» بين الأزواج، وسأعرف أنه نجح من دقة تعليقاتهم المكتوبة.<br><small class="muted">رياضيات</small></div><div class="ex good">في تجربة الذوبان للصف السادس ستوثّق كل مجموعة مراحلها بصورتين وسجل قصير، وسأقارن تفسيراتهم للنتيجة.<br><small class="muted">علوم</small></div></div></details>
+ <div class="card" style="margin-top:16px"><b>اعرضه على زميلك (دقيقتان)</b><p class="muted">يجيب زميلك عن ثلاثة أسئلة:</p><div class="opts">${[['a','هل أفهم ماذا سيفعل بالضبط؟'],['b','هل أعرف في أي حصة وصف؟'],['c','هل سيعرف إن نجح؟']].map(([k,t])=>`<button class="opt ${g.peer[k]?'on':''}" data-gpeer="${k}"><span class="box">${g.peer[k]?'✓':''}</span><span>${t}</span></button>`).join('')}</div></div>
+ <div class="row" style="margin-top:14px"><button class="btn" data-gst="-1">السابق</button><button class="btn" data-copy="goal">انسخ الهدف لنمو</button><button class="btn pri" data-gfinal>${g.final?'تم اعتماده ✓':'اعتمد هدفي'}</button></div>`}
+ return `<p>هدفك يولد من المسافة بين ما بدأت به اليوم وما تعلمته. ست خطوات قصيرة.</p>${steps}<div class="card white">${b}</div>${g.final?doneBtn('goal'):''}`;
+}
+function aTask(){
+ const t=S.d.task;const st=STORY[t.story];
+ return `<div class="reflect"><p>طبّق الأداة التي صممتها اليوم في حصة واحدة من جدولك، ولاحظ كيف تفاعل طلابك معها، ثم اكتب تقريراً من صفحة إلى صفحتين وارفعه في نمو خلال خمسة أيام.</p></div>
+ <div class="split" style="margin-top:14px"><div class="card"><b style="color:var(--ok)">ما هي</b><ul style="margin:6px 0;padding-inline-start:20px"><li>حصة عادية من جدولك</li><li>تجربة أداة واحدة صممتها بنفسك</li><li>ملاحظات قليلة وصور لأعمال الطلاب</li><li>تأمل صادق فيما حدث</li></ul></div><div class="card"><b style="color:var(--coral)">ما ليست</b><ul style="margin:6px 0;padding-inline-start:20px"><li>ليست درساً نموذجياً</li><li>ليست بحثاً علمياً</li><li>لا تحتاج تحضيراً جديداً بالكامل</li><li>الإخفاق فيها مقبول، والمهم ما تعلمته</li></ul></div></div>
+ <div class="sec-h"><span class="num">1</span><h3>شاهد معلماً نفّذها</h3></div><div class="tabs">${Object.entries(STORY).map(([k,v])=>`<button class="btn sm ${t.story===k?'on':''}" data-story="${k}">${v.s}</button>`).join('')}</div>
+ <div class="card white" style="margin-top:8px"><b>${st.who}</b><ol style="margin:8px 0;padding-inline-start:22px">${st.days.map((d,i)=>`<li><span class="muted">اليوم ${i+1}:</span> ${d}</li>`).join('')}</ol><p class="muted">مثال توضيحي.</p></div>
+ <div class="sec-h"><span class="num">2</span><h3>بطاقة خطتي</h3></div><div class="card white stack">
+ <div><span class="muted">هدفي</span><p>${h(S.d.goal.text||'لم تصغ هدفك بعد، ارجع إلى «من البوصلة إلى الهدف».')}</p></div>
+ <div><span class="muted">أداتي</span><p>${h(S.d.tool.task?'أداة تقويم ذاتي لـ'+S.d.tool.task+(S.d.tool.peer?' مع '+S.d.tool.peer:''):'لم تصمم أداتك بعد.')}</p></div>
+ <div class="split"><div><label for="tcl">الفصل</label><input type="text" id="tcl" data-bind="task.cls" placeholder="مثال: 5/2" value="${h(t.cls)}"></div><div><label for="tdt">موعد الحصة</label><input type="text" id="tdt" data-bind="task.date" placeholder="مثال: الثلاثاء، الحصة الثالثة" value="${h(t.date)}"></div></div>
+ <div><span class="muted">الأدلة التي سأجمعها</span><div class="opts" style="margin-top:6px">${EVID.map(e=>{const on=t.ev.includes(e);return `<button class="opt ${on?'on':''}" data-tev="${h(e)}"><span class="box">${on?'✓':''}</span><span>${e}</span></button>`}).join('')}</div></div></div>
+ <div class="sec-h"><span class="num">3</span><h3>اشرحها لزميلك في 30 ثانية</h3></div><p>«ماذا ستفعل في حصتك؟» إن استطعت شرحها بوضوح فأنت جاهز.</p><div class="row"><span class="tmr" id="mini">00:30</span><button class="btn sm" data-mini="30">ابدأ</button></div>
+ <button class="opt ${t.teach?'on':''}" data-tog="task.teach" style="margin-top:10px"><span class="box">${t.teach?'✓':''}</span><span>زميلي فهم خطتي</span></button>
+ ${t.ready?'<p style="margin-top:14px"><span class="chip ok">خطتك جاهزة ✓ ستجدها في «مهمتي» طوال الأيام الخمسة</span></p>':`<button class="btn pri" style="width:100%;margin-top:14px" data-tready ${t.teach&&t.cls&&t.date?'':'disabled'}>خطتي جاهزة</button><p class="muted">يُفعّل بعد كتابة الفصل والموعد وتأكيد زميلك.</p>`}${doneBtn('task')}`;
+}
+function basketView(){
+ return `<div class="wrap" style="padding-top:18px"><h2>سلتي</h2><p class="muted">الأفكار التي أعجبتك اليوم. منها ستختار فكرة هدفك الشخصي.</p>
+ ${S.d.basket.length?`<div class="stack" style="margin-top:12px">${S.d.basket.map(c=>`<div class="card row sp"><b>${h(c)}</b><button class="btn sm" data-bk="${h(c)}">إزالة</button></div>`).join('')}</div>`:'<div class="card" style="margin-top:12px"><p>سلتك فارغة.</p><p class="muted">اضغط «+ أضف لسلتي» عند أي استراتيجية تعجبك أثناء الأنشطة.</p></div>'}
+ <button class="btn sec" style="margin-top:16px" data-open="goal">صُغ هدفي من سلتي</button></div>`;
+}
+function myGoalView(){
+ const g=S.d.goal;const q=quality(g);
+ return `<div class="wrap" style="padding-top:18px"><h2>هدفي الشخصي</h2><p class="muted">${PACK.name}</p>
+ ${g.text?`<div class="reflect" style="margin-top:12px"><p>${h(g.text)}</p><p class="mirror" aria-hidden="true">${h(g.text)}</p></div><div class="row" style="margin-top:8px">${qChips(q)}</div>
+ ${S.note?`<div class="card" style="margin-top:12px;border-color:var(--coral)"><b>ملاحظة المدرب</b><p>${h(S.note)}</p></div>`:''}
+ <div class="row" style="margin-top:14px"><button class="btn" data-copy="goal">انسخ الهدف لنمو</button><button class="btn" data-open="goal">عدّل</button></div>`:`<div class="card" style="margin-top:12px"><p>لم تصغ هدفك بعد.</p><button class="btn pri" data-open="goal">ابدأ الآن</button></div>`}
+ <div class="card" style="margin-top:18px"><b>في الحقيبتين القادمتين</b><p class="muted">سيظهر هنا هدفك في «المعرفة التربوية» ثم «التصميم التعاوني»، وما كتبت أنك ستغيّره، لترى رحلة نموك كاملة.</p></div></div>`;
+}
+function myTaskView(){
+ const t=S.d.task;const o=S.obs;
+ const ST=['لم يخطط','خطط','طبّق','سلّم'];const idx=ST.indexOf(t.status);
+ const CH=[['a','ذكرت هدفي وربطته بفكرة من الحقيبة'],['b','وصفت ما فعلته خطوة بخطوة ولماذا اخترته'],['c','أرفقت دليلين على الأقل (ملاحظة، صورة، تعليق طالب)'],['d','حكمت على نجاحي من الأدلة لا من انطباعي'],['e','كتبت خطوة محددة سأغيّرها في المرة القادمة']];
+ const nCh=CH.filter(([k])=>t.check[k]).length;
+ return `<div class="band">${RIP}<div class="wrap"><div class="hero" style="padding-top:22px"><h1>مهمتي</h1><p>خمسة أيام، وحصة واحدة، وصفحة أو صفحتان. ارفع تقريرك في نمو خلال خمسة أيام دراسية من جلستك.</p>
+ <div class="steps" style="margin-top:12px">${ST.slice(1).map((s,i)=>`<i class="${idx>i?'on':''}"></i>`).join('')}</div><div class="row sp soft" style="font-size:13px"><span>خططت</span><span>طبّقت</span><span>سلّمت</span></div></div></div></div>
+ <div class="wrap">
+ <div class="sec-h"><span class="num">1</span><h3>قبل الحصة</h3></div><div class="card"><p><span class="muted">هدفي:</span> ${h(S.d.goal.text||'لم يُصغ بعد')}</p><p><span class="muted">الحصة:</span> ${h(t.cls||'…')} · ${h(t.date||'…')}</p><p><span class="muted">سأجمع:</span> ${h(t.ev.join('، ')||'…')}</p><p class="muted">اطبع أداتك أو اعرضها على السبورة، وجهّز جوالك للتصوير.</p></div>
+ <div class="sec-h"><span class="num">2</span><h3>أثناء الحصة أو بعدها مباشرة</h3></div><div class="card stack"><p class="muted">بطاقة الملاحظة: ثلاثة أسئلة فقط. ما تكتبه هنا يبقى على جهازك فقط ويدخل قالب تقريرك.</p>
+ <div><label for="o1">ماذا فعل الطلاب؟</label><textarea id="o1" data-obs="did">${h(o.did)}</textarea></div><div><label for="o2">ماذا قالوا؟</label><textarea id="o2" data-obs="said">${h(o.said)}</textarea></div><div><label for="o3">ما الذي فاجأني؟</label><textarea id="o3" data-obs="surp">${h(o.surp)}</textarea></div>
+ <p class="muted">تذكير: التقط صورتين لأعمال الطلاب، دون وجوههم.</p><button class="btn sec" data-tstat="طبّق">طبّقت المهمة</button></div>
+ <div class="sec-h"><span class="num">3</span><h3>بعد الحصة: اكتب تقريرك</h3></div><div class="card stack"><p>نزّل قالب التقرير، وستجد فيه هدفك وخطتك وملاحظاتك مكتوبة مسبقاً. أجب عن ستة أسئلة بجمل قصيرة، ثم ارفعه في نمو.</p>
+ <div class="row"><button class="btn pri" data-dl>نزّل قالب التقرير (Word)</button><button class="btn" data-copy="tpl">انسخ نص القالب</button></div>
+ <details><summary class="muted" style="cursor:pointer">الأسئلة الستة</summary><ol style="padding-inline-start:22px">${TQ.map(q=>`<li>${q[0]}</li>`).join('')}</ol></details></div>
+ <div class="sec-h"><span class="num">4</span><h3>قبل الرفع: فحص دقيقة</h3></div><div class="card"><div class="opts">${CH.map(([k,l])=>`<button class="opt ${t.check[k]?'on':''}" data-chk="${k}"><span class="box">${t.check[k]?'✓':''}</span><span>${l}</span></button>`).join('')}</div>
+ <p style="margin-top:10px" class="${nCh===5?'':'muted'}">${nCh===5?'تقريرك يغطي كل ما ينظر إليه المدرب. ارفعه في نمو.':`غطّيت ${nCh} من 5. ${CH.filter(([k])=>!t.check[k]).map(([,l])=>'راجع: '+l).slice(0,1).join('')}`}</p>
+ <button class="btn sec" style="margin-top:8px" data-tstat="سلّم">رفعت التقرير في نمو</button> ${t.status==='سلّم'?'<span class="chip ok">مبروك، أنجزت مهمتك ✓</span>':''}</div>
+ <button class="btn pri" style="width:100%;margin-top:22px" data-tv="paths">العودة إلى الصفحة الرئيسية</button></div>`;
+}
+function tplText(){
+ const t=S.d.task,o=S.obs;
+ return `تقرير مهمة التأمل والتعلم\n${PACK.name}\nالمعلم: ${S.me.name}\n\nهدفي الشخصي: ${S.d.goal.text}\nالأداة: ${S.d.tool.task?'أداة تقويم ذاتي لـ'+S.d.tool.task:''}\nالحصة: ${t.cls} - ${t.date}\nملاحظاتي من الحصة:\n- ماذا فعل الطلاب: ${o.did}\n- ماذا قالوا: ${o.said}\n- ما الذي فاجأني: ${o.surp}\n\n`+TQ.map((q,i)=>`${i+1}. ${q[0]}\n\n`).join('');
+}
+function tplDoc(){
+ const t=S.d.task,o=S.obs;const p=s=>`<p>${h(s)}</p>`;
+ return `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><style>body{font-family:Arial;direction:rtl;font-size:12pt}h1{font-size:16pt;color:#0f4c55}h2{font-size:13pt;color:#0f4c55;margin-top:18pt}.g{color:#666;font-size:10pt}td{border:1px solid #ccc;padding:6pt;vertical-align:top}</style></head><body dir="rtl"><h1>تقرير مهمة التأمل والتعلم</h1>${p(PACK.name)}${p('المعلم: '+S.me.name)}
+ <table style="border-collapse:collapse;width:100%"><tr><td>هدفي الشخصي</td><td>${h(S.d.goal.text)}</td></tr><tr><td>الأداة</td><td>${h(S.d.tool.task?'أداة تقويم ذاتي لـ'+S.d.tool.task+(S.d.tool.peer?' مع '+S.d.tool.peer:''):'')}</td></tr><tr><td>الحصة</td><td>${h(t.cls+' - '+t.date)}</td></tr><tr><td>ملاحظاتي من الحصة</td><td>ماذا فعل الطلاب: ${h(o.did)}<br>ماذا قالوا: ${h(o.said)}<br>ما الذي فاجأني: ${h(o.surp)}</td></tr></table>
+ ${TQ.map((q,i)=>`<h2>${i+1}. ${h(q[0])}</h2><p class="g">يقابل في سلم التقدير: ${h(q[1])}</p><p>&nbsp;</p><p>&nbsp;</p>`).join('')}<h2>المرفقات</h2><p class="g">أضف صور أعمال الطلاب أو الأداة هنا.</p></body></html>`;
+}
+function download(){
+ const blob=new Blob(['﻿'+tplDoc()],{type:'application/msword'});const a=document.createElement('a');
+ a.href=URL.createObjectURL(blob);a.download='تقرير-مهمة-التأمل.doc';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000);
+}
+
+/* ===== تحميل المحتوى المشترك بعد كل عرض ===== */
+async function fillWall(el){
+ const key=el.dataset.wl;try{const list=await rpc('t_wall',{p_code:S.me.code,p_pack:PK,p_wall:key});
+ const own=el.dataset.editOwn;
+ el.innerHTML=list.length?list.map(w=>`<div class="note ${w.mine?'mine':''}">${h(w.body)}${w.mine?`<small>أنت</small>${own?`<div class="row" style="margin-top:6px"><button class="btn sm" data-wedit="${key}:${w.id}">تعديل</button><button class="btn sm" data-wdel="${w.id}">حذف</button></div>`:''}`:''}</div>`).join(''):'<p class="muted">لا مشاركات بعد. ستظهر مشاركات زملائك هنا تلقائياً.</p>';
+ el._list=list;setNet(true)}catch(e){setNet(false)}
+}
+async function fillPeer(el){
+ try{const r=await rpc('t_peer',{p_code:S.me.code,p_pack:PK,p_field:el.dataset.peer});
+ el.innerHTML=r&&r.text?`<div class="card"><p class="muted">زميلك: أ. ${h((r.name||'').split(' ')[0])}</p><p>${h(r.text)}</p></div>`:'<div class="card"><p class="muted">لم يرسل زملاؤك بعد. ستظهر إجابة زميل هنا تلقائياً خلال لحظات.</p></div>';
+ if(!(r&&r.text)){el._tries=(el._tries||0)+1;if(el._tries<20)setTimeout(()=>{if(document.body.contains(el))fillPeer(el)},3000)}}catch(e){}
+}
+async function loadGallery(){try{const[g,r]=await Promise.all([rpc('t_gallery',{p_code:S.me.code,p_pack:PK}),rpc('t_received',{p_code:S.me.code,p_pack:PK})]);S.gal=g||[];S.recv=r||[];
+ if(S.tv==='act'&&S.act==='gallery'&&!typing()){const a=document.getElementById('gal'),b=document.getElementById('recv');if(a)a.innerHTML=galHtml();if(b)b.innerHTML=recvHtml()}}catch(e){setNet(false)}}
+function afterRender(){
+ document.querySelectorAll('[data-wl]').forEach(fillWall);
+ document.querySelectorAll('[data-peer]').forEach(fillPeer);
+ if(S.tv==='act'&&S.act==='gallery')loadGallery();
+}
+
+/* ===== الدخول والمزامنة ===== */
+async function teacherBoot(){
+ const qs=new URLSearchParams(location.search);let code=(qs.get('c')||'').toUpperCase();
+ if(code){LS.set('taamul-code',code);history.replaceState(null,'',location.pathname)}else code=LS.get('taamul-code','');
+ if(!code){S.tv='scan';return R()}
+ await login(code);
+}
+async function login(code){
+ S.tv='loading';R();
+ let me=null;try{me=await rpc('t_login',{p_code:code})}catch(e){S.tv='scan';R();document.getElementById('scanerr').textContent='تعذّر الاتصال. تأكد من الإنترنت ثم حاول مجدداً.';return}
+ if(!me){LS.del('taamul-code');S.tv='scan';R();document.getElementById('scanerr').textContent='لم نجد هذا الرمز. تأكد منه وحاول مرة أخرى.';return}
+ S.me=me;LS.set('taamul-code',me.code);
+ try{const g=await rpc('t_get',{p_code:me.code,p_pack:PK});const local=LS.get('taamul-d-'+me.code,null);
+  const srv=g&&g.data&&Object.keys(g.data).length?g.data:null;S.d=Object.assign(blank(),srv||local||{});
+  S.live=g.live;S.timerEnd=g.timer_end;S.note=g.note}catch(e){S.d=Object.assign(blank(),LS.get('taamul-d-'+me.code,{}))}
+ S.tv=me.name?'paths':'welcome';R();startTeacherPoll();
+}
+let tPoll=null;
+function startTeacherPoll(){clearInterval(tPoll);tPoll=setInterval(async()=>{if(!S.me||document.hidden)return;
+ try{const r=await rpc('t_live',{p_code:S.me.code});setNet(true);const ch=r.live!==S.live;S.live=r.live;S.timerEnd=r.timer_end;const nch=r.note!==S.note;S.note=r.note;
+  if(ch){const lb=document.getElementById('lb');if(lb)lb.innerHTML=liveBar();document.querySelectorAll('.act').forEach(b=>b.classList.toggle('live',b.dataset.open===S.live))}
+  if(nch&&S.tv==='goalv'&&!typing())R();
+  if(S.tv==='act'&&!typing()){document.querySelectorAll('[data-wl]').forEach(fillWall);document.querySelectorAll('[data-peer]').forEach(el=>{if(!el.querySelector('.card p:not(.muted)'))fillPeer(el)});if(S.act==='gallery')loadGallery()}
+ }catch(e){setNet(false)}},7000)}
+
+/* ===== المدرب ===== */
+function trLogin(err){
+ app.innerHTML=`<div class="band">${RIP}<div class="wrap"><div class="top">${LOGO}</div><div class="hero"><h1>لوحة المدرب</h1><p>اكتب كلمة المدرب السرية. ستُحفظ على هذا الجهاز فلا تُطلب مرة أخرى.</p></div></div></div>
+ <div class="wrap" style="padding-block:22px"><div class="card"><label for="tk">كلمة المدرب</label><input id="tk" type="text" dir="ltr" autocomplete="off" value=""><p class="muted" id="tkerr">${err||''}</p><button class="btn pri" style="width:100%" data-trlogin>دخول</button></div></div>${FOOT}`;
+}
+async function trBoot(){if(!S.tr.key)return trLogin();app.innerHTML=`<div class="wrap" style="padding:40px 16px"><p>جارٍ التحميل…</p></div>`;await loadDash(true)}
+async function loadDash(force){
+ try{const d=await rpc('tr_dash',{p_key:S.tr.key,p_cohort:S.tr.cohort,p_pack:PK});
+  if(!d){LS.del('taamul-trkey');S.tr.key='';S.tr.dash=null;return trLogin('كلمة غير صحيحة.')}
+  S.tr.dash=d;S.live=d.cohort.live_act||'nomu';S.timerEnd=d.cohort.timer_end;
+  if(force||!typing())R();
+ }catch(e){if(force)trLogin('تعذّر الاتصال. تأكد من الإنترنت.')}
+}
+function rosterRows(){return (S.tr.dash.cards||[]).filter(c=>c.name).map(c=>{const d=c.data||{};return {code:c.code,name:c.name,note:c.note,d,
+ goal:(d.goal&&d.goal.text)||'',status:(d.task&&d.task.status)||'لم يخطط',done:d.done||{},q:d.notes&&d.notes.qsent?d.notes.q:''}})}
+function trainer(){
+ const D=S.tr.dash;const c=D.cohort;const tb=S.tr.tab;
+ const T=[['session','الجلسة'],['prog','متابعة الإنجاز'],['att','الحضور'],['goals','الأهداف'],['tasks','المهام'],['cards','البطاقات'],['log','سجلي']];
+ const r=rosterRows();
+ const body={session:trSession,prog:trProg,att:trAtt,goals:trGoals,tasks:trTasks,cards:trCards,log:trLog}[tb](r,c);
+ app.innerHTML=`<div class="band">${RIP}<div class="wide"><div class="top">${LOGO}<a class="btn sm" href="?screen" target="_blank" rel="noopener" style="background:transparent;color:#fff;border-color:rgba(255,255,255,.4);text-decoration:none">شاشة العرض ↗</a></div><div class="hero" style="padding-bottom:20px"><h1>لوحة المدرب</h1><p>${PACK.name} · ${h(c.name)}، ${h(c.date_label)}</p>
+ <div class="row" style="margin-top:12px">${D.cohorts.map(x=>`<button class="btn sm" data-coh="${x.id}" style="${x.id===c.id?`background:#fff;color:${x.color};border-color:#fff`:'background:transparent;color:#fff;border-color:rgba(255,255,255,.35)'}">${h(x.name)}</button>`).join('')}</div></div></div></div>
+ <div class="wide dash" style="padding-block:20px"><div class="side"><div class="tabs">${T.map(([k,l])=>`<button class="btn sm ${tb===k?'on':''}" data-tab="${k}">${l}</button>`).join('')}</div><p class="muted" style="margin-top:12px">تتحدث البيانات تلقائياً كل بضع ثوانٍ.</p></div><div>${body}</div></div>${FOOT}`;
+}
+const empty=c=>`<div class="card"><h3>${h(c.name)}</h3><p>لم يدخل أحد من هذه المجموعة بعد.</p><p class="muted">تظهر البيانات هنا لحظة مسح المعلمين لبطاقاتهم في جلسة ${h(c.date_label)}.</p></div>`;
+function trSession(r,c){
+ const f=FAC[S.live];const tot=r.length;
+ const qs=r.filter(x=>x.q);
+ return `<div class="card row sp" style="margin-bottom:14px"><div><span class="muted">النشاط المفتوح الآن للجميع</span><h3>${h(actBy(S.live).t)}</h3></div><div class="row"><span class="tmr" style="font-size:34px" data-left>${fmt(left())}</span><button class="btn sm" data-tstart="${S.live}">ابدأ مؤقته</button><button class="btn sm" data-tstop>إيقاف</button></div></div>
+ <div class="card white" style="margin-bottom:14px;border-color:var(--coral)"><b>هدف النشاط</b><p>${f.g}</p><b style="display:block;margin-top:8px">خطوات التيسير</b><ol style="margin:4px 0;padding-inline-start:22px">${f.s.map(x=>`<li>${x}</li>`).join('')}</ol><p class="ex" style="margin-top:8px">تلميح: ${f.t}</p></div>
+ <p class="muted">المعلمون يتنقلون بحرية. حين تفتح نشاطاً يظهر لهم شريط «المدرب الآن في» مع زر الانتقال.</p>
+ <div class="acts" style="margin-top:10px">${ACTS.map((a,i)=>{const n=r.filter(x=>x.done[a.id]).length;return `<div class="act ${S.live===a.id?'live':''}"><span class="dot">${i+1}</span><span><b>${a.t}</b><span class="muted">${a.min} د · ${a.mode}</span><div class="bar" style="margin-top:6px"><span style="width:${tot?n/tot*100:0}%"></span></div><span class="muted">${n} من ${tot} أنجزوه</span>${S.live===a.id?'':`<details style="margin-top:4px"><summary class="muted" style="cursor:pointer">ملخص النشاط</summary><p style="font-size:15px">${FAC[a.id].g}</p></details>`}</span>${S.live===a.id?'<span class="chip cor">مفتوح الآن</span>':`<button class="btn sm" data-live="${a.id}">افتح للجميع</button>`}</div>`}).join('')}</div>
+ ${qs.length?`<div class="card" style="margin-top:14px"><b>أسئلة وصلتك (${qs.length})</b>${qs.map(x=>`<p>«${h(x.q)}» <span class="muted">${h(x.name)}</span></p>`).join('')}</div>`:''}
+ <div class="card" style="margin-top:14px"><label for="wa">رابط مجموعة الواتساب لـ${h(c.name)}</label><div class="row" style="flex-wrap:nowrap"><input id="wa" type="text" dir="ltr" placeholder="https://chat.whatsapp.com/..." value="${h(c.wa_link||'')}"><button class="btn sec sm" data-wa>حفظ</button></div><p class="muted">يظهر للمعلم في صفحة الترحيب بعد إدخال اسمه.</p></div>`;
+}
+function trProg(r,c){
+ if(!r.length)return empty(c);
+ let rows=r.map(x=>{const m=ACTS.map(a=>!!x.done[a.id]);return {...x,m,p:Math.round(m.filter(Boolean).length/ACTS.length*100)}});
+ if(S.tr.sort==='low')rows=rows.slice().sort((a,b)=>a.p-b.p);
+ const avg=Math.round(rows.reduce((a,x)=>a+x.p,0)/rows.length);
+ const full=rows.filter(x=>x.p===100).length,low=rows.filter(x=>x.p<50).length;const col=j=>rows.filter(x=>x.m[j]).length;
+ return `<div class="grid3" style="margin-bottom:14px"><div class="kpi"><b>${avg}%</b>متوسط إنجاز المجموعة</div><div class="kpi"><b style="color:var(--ok)">${full}</b>أنجزوا كل الأنشطة</div><div class="kpi"><b style="color:var(--coral)">${low}</b>أقل من 50%</div></div>
+ <div class="row sp" style="margin-bottom:10px"><span class="muted">✓ أنجز النشاط · ○ لم ينجزه بعد</span><span class="row"><button class="btn sm ${S.tr.sort!=='low'?'on':''}" data-sort="name">ترتيب الحضور</button><button class="btn sm ${S.tr.sort==='low'?'on':''}" data-sort="low">الأقل إنجازاً أولاً</button></span></div>
+ <div class="scroll card white" style="padding:0"><table class="tbl prog"><thead><tr><th class="nm">المتدرب</th>${ACTS.map((a,j)=>`<th title="${h(a.t)}"><span class="vt">${j+1}. ${SHORT[a.id]}</span></th>`).join('')}<th>الإنجاز</th></tr></thead><tbody>
+ ${rows.map(x=>`<tr><td class="nm">${h(x.name)}</td>${x.m.map(v=>`<td class="ck ${v?'y':''}">${v?'✓':'○'}</td>`).join('')}<td class="pc"><b style="color:${x.p===100?'var(--ok)':x.p<50?'var(--coral)':'var(--ink)'}">${x.p}%</b><div class="bar"><span style="width:${x.p}%;${x.p<50?'background:var(--coral)':''}"></span></div></td></tr>`).join('')}
+ </tbody><tfoot><tr><td class="nm muted">أنجزه</td>${ACTS.map((a,j)=>`<td class="ck muted">${col(j)}</td>`).join('')}<td></td></tr></tfoot></table></div>`;
+}
+function trAtt(r,c){
+ const cards=S.tr.dash.cards;const free=cards.filter(x=>!x.name);
+ return `<div class="grid3" style="margin-bottom:14px"><div class="kpi"><b>${r.length}</b>دخلوا</div><div class="kpi"><b>${free.length}</b>بطاقات لم تُفعَّل</div><div class="kpi"><b>${cards.length}</b>إجمالي البطاقات</div></div>
+ ${r.length?'':empty(c)}
+ <div class="cards">${r.map(x=>`<div class="card" style="padding:12px">${S.tr.ed===x.code?`<input type="text" id="rn" value="${h(x.name)}"><div class="row" style="margin-top:6px"><button class="btn sec sm" data-rnsave="${x.code}">حفظ</button><button class="btn sm" data-rncancel>إلغاء</button></div>`:
+ S.tr.mv===x.code?`<b>${h(x.name)}</b><p class="muted">انقله إلى بطاقة لم تُفعَّل:</p><select id="mvto">${free.map(f=>`<option>${f.code}</option>`).join('')}</select><div class="row" style="margin-top:6px"><button class="btn sec sm" data-mvsave="${x.code}">انقل</button><button class="btn sm" data-rncancel>إلغاء</button></div>`:
+ `<b>${h(x.name)}</b><p class="muted" dir="ltr" style="text-align:end">${x.code}</p><div class="row"><button class="btn sm" data-rn="${x.code}">تعديل الاسم</button><button class="btn sm" data-mv="${x.code}" ${free.length?'':'disabled'}>بطاقة بديلة</button></div>`}</div>`).join('')}</div>
+ <p class="muted" style="margin-top:12px">«بطاقة بديلة» تنقل اسم المعلم وكل ما أنجزه إلى بطاقة جديدة إذا ضاعت بطاقته.</p>`;
+}
+function trGoals(r,c){
+ if(!r.length)return empty(c);
+ const rows=r.map(x=>({...x,q:quality(Object.assign({text:x.goal},x.d.goal||{}))}));
+ const good=rows.filter(x=>!x.q.empty&&x.q.score===3).length,weak=rows.filter(x=>!x.q.empty&&x.q.score<3).length,emp=rows.filter(x=>x.q.empty).length;
+ const f=S.tr.filter;const list=rows.filter(x=>f==='all'||(f==='weak'&&!x.q.empty&&x.q.score<3)||(f==='empty'&&x.q.empty));
+ return `<div class="grid3" style="margin-bottom:14px"><div class="kpi"><b style="color:var(--ok)">${good}</b>أهداف مكتملة الجودة</div><div class="kpi"><b style="color:var(--coral)">${weak}</b>تحتاج تحسيناً</div><div class="kpi"><b>${emp}</b>لم تُكتب بعد</div></div>
+ <div class="row" style="margin-bottom:12px">${[['all','الكل'],['weak','تحتاج تحسيناً'],['empty','لم تُكتب']].map(([k,l])=>`<button class="btn sm ${f===k?'on':''}" data-flt="${k}">${l}</button>`).join('')}</div>
+ <div class="stack">${list.map(x=>`<div class="card white"><div class="row sp"><b>${h(x.name)}</b><span class="row">${qChips(x.q)}</span></div><p style="margin-top:6px">${h(x.goal)||'<span class="muted">لم يكتب هدفه بعد</span>'}</p>
+ ${x.note?`<p class="muted">ملاحظتك: ${h(x.note)} <span class="chip ok">وصلت</span> <button class="btn sm" data-note-clear="${x.code}">حذف الملاحظة</button></p>`:`<div class="row" style="flex-wrap:nowrap;margin-top:8px"><input type="text" id="n-${x.code}" placeholder="ملاحظة قصيرة تصله فوراً"><button class="btn sec sm" data-note="${x.code}">أرسل</button></div>`}</div>`).join('')}</div>`;
+}
+function trTasks(r,c){
+ if(!r.length)return empty(c);
+ const ST=['لم يخطط','خطط','طبّق','سلّم'];const cnt=ST.map(s=>r.filter(x=>x.status===s).length);
+ return `<p class="muted" style="margin-bottom:12px">الحالة يحدّثها المعلم بنفسه من صفحة «مهمتي».</p><div class="card stack">${ST.map((s,i)=>`<div><div class="row sp"><span>${s}</span><b>${cnt[i]}</b></div><div class="bar"><span style="width:${cnt[i]/r.length*100}%;background:${['var(--line)','var(--lagoon)','var(--warn)','var(--ok)'][i]}"></span></div></div>`).join('')}</div>
+ <div class="scroll" style="margin-top:14px"><table class="tbl"><thead><tr><th>المعلم</th><th>الحالة</th><th>الحصة</th></tr></thead><tbody>${r.map(x=>`<tr><td>${h(x.name)}</td><td><span class="chip ${x.status==='سلّم'?'ok':x.status==='لم يخطط'?'cor':''}">${x.status}</span></td><td class="muted">${h([(x.d.task||{}).cls,(x.d.task||{}).date].filter(Boolean).join(' · '))}</td></tr>`).join('')}</tbody></table></div>`;
+}
+function qrSvg(t){try{const q=qrcode(0,'M');q.addData(t);q.make();return q.createSvgTag({cellSize:4,margin:0,scalable:true})}catch(e){return '<div class="muted" style="padding-top:40px">QR</div>'}}
+const cardUrl=k=>BASE+'?c='+k;
+function cardHtml(k,c,isNew,used){return `<div class="kcard" style="border-color:${c.color}">${isNew?'<span class="chip cor">جديدة</span>':''}${used?'<span class="chip">مُفعّلة</span>':''}<b style="display:block">منصة تأمل</b><div class="muted" style="font-size:13px">${h(c.name)}</div><div class="qr">${qrSvg(cardUrl(k))}</div><div class="code">${k}</div><div class="muted" style="font-size:13px">امسح الرمز. احتفظ بالبطاقة، فهي مفتاحك طوال المسار.</div></div>`}
+function trCards(r,c){
+ const cards=S.tr.dash.cards;const ex=cards.filter(x=>x.extra);
+ return `<div class="card" style="margin-bottom:14px"><b>${cards.length} بطاقة لـ${h(c.name)}</b><p class="muted">لون الحد يميز المجموعة${ex.length?`، ومنها ${ex.length} بطاقة إضافية`:''}.</p>
+ <div class="row" style="margin-top:10px"><button class="btn pri sm" data-print="all">اطبع كل البطاقات</button><button class="btn sm" data-print="free">اطبع غير المفعّلة فقط</button></div>
+ <div class="row" style="margin-top:12px"><span>ولّد</span>${[1,5,10].map(n=>`<button class="btn sm ${S.tr.add===n?'on':''}" data-addn="${n}">${n}</button>`).join('')}<button class="btn sec sm" data-gen>+ ولّد بطاقات جديدة</button></div>
+ <p class="muted" style="margin-top:8px">كل بطاقة جديدة برمز فريد، وتعمل فوراً لمعلم ينضم متأخراً أو بطاقة تلفت. للطباعة اختر من نافذة الطباعة «حفظ PDF» أو طابعتك مباشرة.</p></div>
+ <div class="cards">${cards.map(x=>cardHtml(x.code,c,S.tr.lastGen.includes(x.code),!!x.name)).join('')}</div>`;
+}
+function trLog(r,c){
+ const L=S.tr.log;
+ return `<div class="card"><label for="lg">ملاحظة سريعة عن «${h(actBy(S.live).t)}»</label><textarea id="lg" placeholder="مثال: النشاط طال، المجموعة الثالثة احتاجت مثالاً إضافياً"></textarea><button class="btn sec" style="margin-top:8px" data-log>احفظ</button><p class="muted">هذه الملاحظات مادة التأمل في تقريرك الختامي، وتُحفظ لكل المجموعات.</p></div>
+ <div class="stack" style="margin-top:14px">${L==null?'<p class="muted">جارٍ التحميل…</p>':L.length?L.map(l=>`<div class="card white"><div class="row sp"><b>${h(SHORT[l.act]||l.act||'')}</b><span class="muted">المجموعة ${l.cohort} · ${new Date(l.at).toLocaleString('ar-SA',{weekday:'long',hour:'2-digit',minute:'2-digit'})}</span></div><p>${h(l.body)}</p></div>`).join(''):'<p class="muted">لا ملاحظات بعد.</p>'}</div>`;
+}
+function printCards(which){
+ const c=S.tr.dash.cohort;const list=S.tr.dash.cards.filter(x=>which==='all'||!x.name);
+ const p=document.getElementById('print');p.innerHTML=`<div class="psheet">${list.map(x=>cardHtml(x.code,c,false,false)).join('')}</div>`;
+ setTimeout(()=>window.print(),300);
+}
+let trPoll=null;
+function startTrainerPoll(){clearInterval(trPoll);trPoll=setInterval(()=>{if(!document.hidden&&S.tr.key&&S.tr.tab!=='cards')loadDash(false)},8000)}
+
+/* ===== شاشة العرض ===== */
+let scPoll=null;
+async function screenLoad(){
+ if(!S.tr.key){app.innerHTML=`<div class="screen"><h1>افتح لوحة المدرب أولاً على هذا الجهاز</h1><p><a style="color:#fff" href="?trainer">لوحة المدرب</a></p></div>`;return}
+ try{const d=await rpc('tr_dash',{p_key:S.tr.key,p_cohort:S.tr.cohort,p_pack:PK});if(!d)return;S.tr.dash=d;S.live=d.cohort.live_act;S.timerEnd=d.cohort.timer_end;
+ const walls=S.live==='compass'?['compass']:S.live==='strat'?['peer','doc']:[];S.scWall=[];
+ for(const w of walls){const l=await rpc('tr_wall',{p_key:S.tr.key,p_cohort:S.tr.cohort,p_pack:PK,p_wall:w});S.scWall=S.scWall.concat(l||[])}R()}catch(e){}
+}
+function screen(){
+ const D=S.tr.dash;if(!D)return;const a=actBy(S.live);const r=rosterRows();const nGoals=r.filter(x=>x.d.goal&&x.d.goal.final).length;
+ app.innerHTML=`<div class="screen"><div class="row sp">${LOGO}<span class="chip">${h(D.cohort.name)}</span></div>
+ <div style="margin-top:30px" class="row sp"><div><p style="color:#b9dedb">${PACK.short}</p><h1>${h(a.t)}</h1><p style="color:#cfe9e6;font-size:20px">${h(a.d)}</p></div><span class="tmr" data-left>${fmt(left())}</span></div>
+ ${S.scWall&&S.scWall.length?`<div class="wall" style="margin-top:28px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">${S.scWall.map(w=>`<div class="note">${h(w.body)}</div>`).join('')}</div>`:''}
+ ${a.id==='goal'?`<div class="card" style="margin-top:28px;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);color:#fff"><h2>${nGoals} من ${r.length} اعتمدوا أهدافهم</h2><div class="bar" style="margin-top:12px;background:rgba(255,255,255,.2)"><span style="width:${r.length?nGoals/r.length*100:0}%;background:#f2785c"></span></div></div>`:''}
+ ${a.id==='task'?`<div class="reflect" style="margin-top:28px;background:rgba(255,255,255,.08)"><p>قبل أن تغادر: اشرح خطتك لزميلك في 30 ثانية.</p></div>`:''}
+ <p style="margin-top:40px;color:#b9dedb">للدخول: امسح رمز بطاقتك أو افتح ${h(location.host+location.pathname)}</p></div>`;
+}
+
+/* ===== التفاعل ===== */
+function setPath(p,v){const k=p.split('.');let o=S.d;for(let i=0;i<k.length-1;i++)o=o[k[i]];o[k[k.length-1]]=v}
+function getPath(p){return p.split('.').reduce((o,k)=>o[k],S.d)}
+let miniT=null;
+app.addEventListener('input',e=>{
+ const el=e.target;
+ if(el.dataset.obs){S.obs[el.dataset.obs]=el.value;LS.set('taamul-obs',S.obs);return}
+ const b=el.dataset.bind;if(!b)return;setPath(b,el.value);save();
+ if(b==='goal.text'){const x=document.getElementById('gtx');if(x){x.textContent=el.value;x.nextElementSibling.textContent=el.value}const q=document.getElementById('gq');if(q)q.innerHTML=qChips(quality(S.d.goal))}
+});
+app.addEventListener('click',async e=>{
+ const el=e.target.closest('button');if(!el)return;const d=el.dataset;const D=S.d;
+ try{
+ if(d.scan!==undefined){const v=document.getElementById('code').value.trim().toUpperCase();if(!v){toast('اكتب رمز البطاقة');return}return login(v)}
+ if(d.start!==undefined){const v=document.getElementById('nm').value.trim();if(v.length<2){toast('اكتب اسمك من فضلك');return}
+  el.disabled=true;const ok=await rpc('t_set_name',{p_code:S.me.code,p_name:v});if(!ok){el.disabled=false;toast('تعذّر الحفظ، حاول مجدداً');return}
+  S.me.name=v;S.tv='paths';window.scrollTo(0,0);return R()}
+ if(d.trlogin!==undefined){const k=document.getElementById('tk').value.trim();if(!k)return;S.tr.key=k;LS.set('taamul-trkey',k);await loadDash(true);startTrainerPoll();rpc('tr_log',{p_key:k,p_cohort:S.tr.cohort,p_pack:PK,p_act:null,p_body:''}).then(l=>{S.tr.log=l}).catch(()=>{});return}
+ if(d.tv){S.tv=d.tv;window.scrollTo(0,0)}
+ else if(d.open){S.tv='act';S.act=d.open;if(d.open==='gallery'){S.gal=null;S.recv=null}window.scrollTo(0,0)}
+ else if(d.next){D.done[d.next]=true;const i=ACTS.findIndex(a=>a.id===d.next);const nx=ACTS[i+1];if(nx){S.tv='act';S.act=nx.id;if(nx.id==='gallery'){S.gal=null;S.recv=null}}else S.tv='mytask';window.scrollTo(0,0);save()}
+ else if(d.nomu){D.nomu[d.nomu]=!D.nomu[d.nomu];save()}
+ else if(d.tog){setPath(d.tog,!getPath(d.tog));save()}
+ else if(d.bk){const i=D.basket.indexOf(d.bk);if(i>=0)D.basket.splice(i,1);else{D.basket.push(d.bk);toast('أُضيفت إلى سلتك')}save()}
+ else if(d.mini!==undefined){const sec=+(d.mini||60);clearInterval(miniT);const end=Date.now()+sec*1000;miniT=setInterval(()=>{const m=document.getElementById('mini');const l=end-Date.now();if(!m||l<=0){clearInterval(miniT);if(m)m.textContent='انتهى الوقت';return}m.textContent=fmt(l)},250);return}
+ else if(d.csend!==undefined){const c=D.compass;if(!c.txt.trim()){toast('اكتب إجابتك أولاً');return}
+  if(c.share){await rpc('t_post',{p_code:S.me.code,p_pack:PK,p_wall:'compass',p_body:c.txt,p_id:c.pid});if(!c.pid){const l=await rpc('t_wall',{p_code:S.me.code,p_pack:PK,p_wall:'compass'});const m=(l||[]).find(x=>x.mine);c.pid=m?m.id:null}}
+  else if(c.pid){await rpc('t_unpost',{p_code:S.me.code,p_id:c.pid});c.pid=null}
+  c.sent=true;await saveNow()}
+ else if(d.edit){D[d.edit].sent=false;save()}
+ else if(d.cyc){const[k,o]=d.cyc.split(':');D.cycle.a[k]=o;D.cycle.checked=false;save()}
+ else if(d.ccheck!==undefined){if(Object.keys(D.cycle.a).length<3){toast('اختر للمداخل الثلاثة');return}D.cycle.checked=true;save()}
+ else if(d.nsend!==undefined){if(!D.notes.mine.trim()){toast('اكتب ملخصك أولاً');return}D.notes.sent=true;await saveNow()}
+ else if(d.nv){D.notes.verdict=d.nv;save()}
+ else if(d.nq!==undefined){if(!D.notes.q.trim())return;D.notes.qsent=true;save();toast('وصل سؤالك للمدرب')}
+ else if(d.wall){const k=d.wall;const i=document.getElementById('in-'+k);const v=i.value.trim();if(!v)return;el.disabled=true;
+  await rpc('t_post',{p_code:S.me.code,p_pack:PK,p_wall:k,p_body:v,p_id:S.editing[k]||null});S.editing[k]=null;i.value='';el.disabled=false;el.textContent='انشر';
+  fillWall(document.getElementById('w-'+k));return}
+ else if(d.wedit){const[k,id]=d.wedit.split(':');const w=(document.getElementById('w-'+k)._list||[]).find(x=>String(x.id)===id);if(!w)return;
+  S.editing[k]=+id;const i=document.getElementById('in-'+k);i.value=w.body;i.focus();const b=document.querySelector(`[data-wall="${k}"]`);if(b)b.textContent='حفظ التعديل';return}
+ else if(d.wdel){await rpc('t_unpost',{p_code:S.me.code,p_id:+d.wdel});toast('حُذفت مشاركتك');document.querySelectorAll('[data-wl]').forEach(fillWall);return}
+ else if(d.ttype){D.tool.type=d.ttype;save()}
+ else if(d.crit){const i=D.tool.crit.indexOf(d.crit);if(i>=0)D.tool.crit.splice(i,1);else if(D.tool.crit.length<5)D.tool.crit.push(d.crit);else toast('خمسة معايير تكفي');save()}
+ else if(d.scale){D.tool.scale=d.scale;save()}
+ else if(d.tpeer){D.tool.peer=d.tpeer;save()}
+ else if(d.tpub!==undefined){D.tool.pub=true;if(!inBasket('التقويم الذاتي بسلم تقدير'))D.basket.push('التقويم الذاتي بسلم تقدير');save();toast('نُشرت أداتك، وأُضيفت فكرتها إلى سلتك')}
+ else if(d.galr!==undefined){loadGallery();return}
+ else if(d.give){const k=d.give;const g=id=>document.getElementById('g'+k+id).value.trim();const a=g('a'),b=g('b'),c=g('c');if(!a||!c){toast('نجمة وأمنية على الأقل');return}
+  el.disabled=true;await rpc('t_give',{p_code:S.me.code,p_pack:PK,p_to:k,p_s1:a,p_s2:b,p_wish:c});S.editing['g'+k]=false;const x=S.gal.find(z=>z.code===k);if(x)x.given={a,b,c};toast('وصلت ملاحظتك لزميلك')}
+ else if(d.gedit){S.editing['g'+d.gedit]=true}
+ else if(d.gst){D.goal.st=Math.max(0,Math.min(5,D.goal.st+ +d.gst));if(D.goal.st===5)D.goal.text=goalSentence(D.goal);save()}
+ else if(d.gset){const p=d.gset.indexOf(':');D.goal[d.gset.slice(0,p)]=d.gset.slice(p+1);save()}
+ else if(d.gpeer){D.goal.peer[d.gpeer]=!D.goal.peer[d.gpeer];save()}
+ else if(d.gfinal!==undefined){if(!D.goal.text.trim())return;D.goal.final=true;D.done.goal=true;save();toast('اعتُمد هدفك')}
+ else if(d.copy){const txt=d.copy==='goal'?D.goal.text:tplText();try{await navigator.clipboard.writeText(txt);toast('نُسخ، الصقه في نمو')}catch(err){toast('تعذّر النسخ التلقائي، انسخه يدوياً')}return}
+ else if(d.story){D.task.story=d.story;save()}
+ else if(d.tev){const i=D.task.ev.indexOf(d.tev);if(i>=0)D.task.ev.splice(i,1);else D.task.ev.push(d.tev);save()}
+ else if(d.tready!==undefined){D.task.ready=true;D.task.status='خطط';D.done.task=true;save();toast('خطتك جاهزة، تجدها في «مهمتي»')}
+ else if(d.tstat){D.task.status=d.tstat;save();toast(d.tstat==='سلّم'?'أحسنت، أنجزت المهمة':'رائع، الخطوة التالية كتابة التقرير')}
+ else if(d.chk){D.task.check[d.chk]=!D.task.check[d.chk];save()}
+ else if(d.dl!==undefined){download();return}
+ /* المدرب */
+ else if(d.coh){S.tr.cohort=+d.coh;LS.set('taamul-trcoh',S.tr.cohort);S.tr.lastGen=[];return loadDash(true)}
+ else if(d.tab){S.tr.tab=d.tab;if(d.tab==='log')rpc('tr_log',{p_key:S.tr.key,p_cohort:S.tr.cohort,p_pack:PK,p_act:null,p_body:''}).then(l=>{S.tr.log=l;if(S.tr.tab==='log')R()})}
+ else if(d.live){await rpc('tr_set',{p_key:S.tr.key,p_cohort:S.tr.cohort,p_live:d.live,p_timer_end:null,p_wa:null});toast('ظهر للمعلمين شريط الانتقال');return loadDash(true)}
+ else if(d.tstart){const end=new Date(Date.now()+actBy(d.tstart).min*60000).toISOString();await rpc('tr_set',{p_key:S.tr.key,p_cohort:S.tr.cohort,p_live:null,p_timer_end:end,p_wa:null});return loadDash(true)}
+ else if(d.tstop!==undefined){await rpc('tr_set',{p_key:S.tr.key,p_cohort:S.tr.cohort,p_live:null,p_timer_end:null,p_wa:null});return loadDash(true)}
+ else if(d.wa!==undefined){const v=document.getElementById('wa').value.trim();await rpc('tr_set',{p_key:S.tr.key,p_cohort:S.tr.cohort,p_live:null,p_timer_end:S.timerEnd,p_wa:v});toast('حُفظ الرابط');return loadDash(true)}
+ else if(d.sort){S.tr.sort=d.sort}
+ else if(d.flt){S.tr.filter=d.flt}
+ else if(d.note){const i=document.getElementById('n-'+d.note);if(!i.value.trim())return;await rpc('tr_note',{p_key:S.tr.key,p_code:d.note,p_note:i.value.trim()});toast('وصلت ملاحظتك للمعلم');return loadDash(true)}
+ else if(d.noteClear){await rpc('tr_note',{p_key:S.tr.key,p_code:d.noteClear,p_note:''});return loadDash(true)}
+ else if(d.rn){S.tr.ed=d.rn;S.tr.mv=null}
+ else if(d.mv){S.tr.mv=d.mv;S.tr.ed=null}
+ else if(d.rncancel!==undefined){S.tr.ed=S.tr.mv=null}
+ else if(d.rnsave){const v=document.getElementById('rn').value.trim();if(v.length<2)return;await rpc('tr_rename',{p_key:S.tr.key,p_code:d.rnsave,p_name:v});S.tr.ed=null;return loadDash(true)}
+ else if(d.mvsave){const to=document.getElementById('mvto').value;const ok=await rpc('tr_move',{p_key:S.tr.key,p_from:d.mvsave,p_to:to});S.tr.mv=null;toast(ok?'نُقل المعلم إلى البطاقة '+to:'تعذّر النقل');return loadDash(true)}
+ else if(d.addn){S.tr.add=+d.addn}
+ else if(d.gen!==undefined){el.disabled=true;const codes=await rpc('tr_gen',{p_key:S.tr.key,p_cohort:S.tr.cohort,p_n:S.tr.add});S.tr.lastGen=codes||[];toast('وُلّدت '+(codes||[]).length+' بطاقة جديدة');return loadDash(true)}
+ else if(d.print){return printCards(d.print)}
+ else if(d.log!==undefined){const i=document.getElementById('lg');if(!i.value.trim())return;S.tr.log=await rpc('tr_log',{p_key:S.tr.key,p_cohort:S.tr.cohort,p_pack:PK,p_act:S.live,p_body:i.value.trim()});toast('حُفظت الملاحظة')}
+ else return;
+ }catch(err){toast('تعذّر الاتصال، حاول مرة أخرى');setNet(false);return}
+ R();
+});
+setInterval(()=>{const l=fmt(left());document.querySelectorAll('[data-left]').forEach(x=>x.textContent=l)},500);
+
+/* ===== البدء ===== */
+{
+ const qs=new URLSearchParams(location.search);
+ if(qs.has('trainer')){S.mode='trainer';trBoot();startTrainerPoll()}
+ else if(qs.has('screen')){S.mode='screen';screenLoad();scPoll=setInterval(()=>{if(!document.hidden)screenLoad()},5000)}
+ else teacherBoot();
+}
+
+</script>
+</body>
+</html>
