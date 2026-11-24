@@ -137,6 +137,25 @@ textarea{min-height:96px;resize:vertical}
 .ex.good{border-color:var(--ok)}.ex.bad{border-color:var(--coral)}
 @media(max-width:600px){.split{grid-template-columns:minmax(0,1fr)}.tbl{font-size:14px}}
 @media(min-width:900px){.dash{display:grid;grid-template-columns:260px minmax(0,1fr);gap:24px;align-items:start}.dash .side{position:sticky;top:16px}.tabs{flex-direction:column}.tabs .btn{justify-content:flex-start}}
+.nav{grid-template-columns:repeat(5,minmax(0,1fr))}
+.nav button{font-size:12px}
+.badge-pop{position:fixed;inset-inline:16px;top:16px;margin:auto;max-width:420px;z-index:30;display:flex;gap:12px;align-items:center;background:var(--deep);color:#fff;padding:12px 16px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.25);animation:pop .45s cubic-bezier(.2,1.4,.4,1)}
+.badge-pop .bi{font-size:34px;line-height:1}
+.badge-pop b{display:block;font-family:"Readex Pro"}
+.badge-pop small{opacity:.85}
+@keyframes pop{from{transform:translateY(-30px) scale(.9);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.badge-pop{animation:none}}
+.bdgs{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.bdg{border:1px dashed var(--line);border-radius:14px;padding:12px 10px;text-align:center;display:grid;gap:2px;justify-items:center;opacity:.55;filter:grayscale(1)}
+.bdg .bi{font-size:30px;line-height:1.2}
+.bdg b{font-size:14px}
+.bdg small{font-size:12px;color:var(--soft);line-height:1.4}
+.bdg.on{opacity:1;filter:none;border-style:solid;border-color:var(--lagoon);background:var(--lagoonbg)}
+.avatar{width:62px;height:62px;border-radius:50%;background:var(--coral);color:#fff;display:grid;place-items:center;font-family:"Readex Pro";font-size:28px;font-weight:700;border:3px solid rgba(255,255,255,.35)}
+.mrow{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;text-align:start;background:none;border:1px solid var(--line);border-radius:12px;padding:8px 10px;color:var(--ink);font:inherit;cursor:pointer}
+.mrow .dot{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--surf);font-size:13px;font-weight:700}
+.mrow .dot.y{background:var(--ok);color:#fff}
+.nextc{border-color:var(--lagoon);background:var(--lagoonbg)}
 
 #print{display:none}
 @media print{
@@ -224,27 +243,46 @@ const BASE=location.origin+location.pathname;
 const RIP=`<svg class="rip drop" viewBox="0 0 340 340" aria-hidden="true"><g fill="none" stroke="#7fd6d1" stroke-width="2"><circle class="r" cx="170" cy="170" r="150"/><circle class="r" cx="170" cy="170" r="150"/><circle class="r" cx="170" cy="170" r="150"/></g><circle cx="170" cy="170" r="10" fill="#f2785c"/></svg>`;
 const LOGO=`<span class="logo"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="none" stroke="#7fd6d1" stroke-width="2" opacity=".5"/><circle cx="20" cy="20" r="11" fill="none" stroke="#7fd6d1" stroke-width="2"/><path d="M20 8c4 6 6 9 6 12a6 6 0 0 1-12 0c0-3 2-6 6-12z" fill="#f2785c"/></svg>منصة تأمل</span>`;
 const ICON={
+ me:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4.5 4.5-6.5 8-6.5s7 2 8 6.5"/></svg>',
  home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg>',
  bk:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9h18l-2 11H5z"/><path d="M8 9l4-6 4 6"/></svg>',
  goal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>',
  task:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c4 6 6 9 6 12a6 6 0 0 1-12 0c0-3 2-6 6-12z"/></svg>'};
-const FOOT='<div class="foot">منصة تأمل: أداة تدريبية داعمة من إعداد د. عبدالله البقيلي</div>';
+const foot=()=>`<div class="foot">منصة تأمل: أداة تدريبية داعمة من إعداد ${h(S.trainer||'د. عبدالله البقيلي')}</div>`;
 
 /* ===== الحالة ===== */
 const blank=()=>({done:{},nomu:{},basket:[],compass:{txt:'',share:true,sent:false,after:'',pid:null},cycle:{a:{},checked:false},
  notes:{mine:'',sent:false,verdict:'',q:'',qsent:false},tool:{task:'',type:'',crit:[],custom:'',scale:'three',peer:'',pub:false},keep:'',improve:'',
  goal:{st:0,challenge:'',concept:'',cls:'',change:'',evidence:'',text:'',peer:{},final:false},
- task:{story:'ar',cls:'',date:'',ev:[],teach:false,ready:false,check:{},status:'لم يخطط'}});
+ task:{story:'ar',cls:'',date:'',ev:[],teach:false,ready:false,check:{},status:'لم يخطط'},g:{posts:0,given:[]},badges:[]});
 const S={mode:'teacher',tv:'loading',act:null,me:null,d:blank(),obs:LS.get('taamul-obs',{did:'',said:'',surp:''}),
  live:'nomu',timerEnd:null,note:null,editing:{},gal:null,recv:null,
- tr:{key:LS.get('taamul-trkey',''),cohort:LS.get('taamul-trcoh',1),tab:'session',dash:null,filter:'all',sort:'name',add:5,lastGen:[],log:null,ed:null,mv:null}};
+ trainer:'',confirm:null,tr:{key:LS.get('taamul-trkey',''),cohort:LS.get('taamul-trcoh',1),tab:'session',dash:null,filter:'all',sort:'name',add:5,lastGen:[],log:null,ed:null,mv:null}};
 
 /* ===== حفظ تقدم المعلم ===== */
 let saveT=null,saving=false;
-function save(){if(!S.me)return;LS.set('taamul-d-'+S.me.code,S.d);clearTimeout(saveT);saveT=setTimeout(push,700)}
+function save(){if(!S.me)return;checkBadges();LS.set('taamul-d-'+S.me.code,S.d);clearTimeout(saveT);saveT=setTimeout(push,700)}
 async function push(){if(saving){save();return}saving=true;try{await rpc('t_save',{p_code:S.me.code,p_pack:PK,p_data:S.d});setNet(true)}catch(e){setNet(false);clearTimeout(saveT);saveT=setTimeout(push,5000)}saving=false}
-function saveNow(){if(!S.me)return;LS.set('taamul-d-'+S.me.code,S.d);clearTimeout(saveT);return push()}
+function saveNow(){if(!S.me)return;checkBadges();LS.set('taamul-d-'+S.me.code,S.d);clearTimeout(saveT);return push()}
 function setNet(ok){const n=document.getElementById('net');if(n)n.hidden=ok}
+
+/* ===== النجوم والشارات ===== */
+const BADGES=[
+ {id:'start',i:'🧭',n:'المبادر',d:'أرسلت إجابتك في البوصلة',ok:d=>d.compass.sent},
+ {id:'collect',i:'🧺',n:'جامع الأفكار',d:'جمعت ثلاث أفكار في سلتك',ok:d=>d.basket.length>=3},
+ {id:'voice',i:'💬',n:'صوت المجموعة',d:'شاركت على الجدار مرتين',ok:d=>(d.g.posts||0)>=2},
+ {id:'design',i:'🛠️',n:'المصمّم',d:'نشرت أداة تقويمك الذاتي',ok:d=>!!d.tool.pub},
+ {id:'critic',i:'🤝',n:'الناقد البنّاء',d:'كتبت ملاحظات لأداتي زميلين',ok:d=>(d.g.given||[]).length>=2},
+ {id:'goal',i:'🎯',n:'صاحب الهدف',d:'اعتمدت هدفاً مكتمل الجودة',ok:d=>!!d.goal.final&&quality(d.goal).score===3},
+ {id:'all',i:'🏁',n:'المنجز',d:'أنجزت كل أنشطة الجلسة',ok:d=>ACTS.every(a=>d.done[a.id])},
+ {id:'impact',i:'🌱',n:'صاحب الأثر',d:'رفعت تقرير مهمة التأمل',ok:d=>d.task.status==='سلّم'}];
+function stars(d){d=d||S.d;const g=d.g||{};return ACTS.filter(a=>d.done&&d.done[a.id]).length+Math.min(g.posts||0,5)+(g.given||[]).length+(d.goal&&d.goal.final?2:0)+(d.task&&d.task.status==='سلّم'?3:0)}
+function earned(d){d=d||S.d;try{return BADGES.filter(b=>b.ok(d))}catch(e){return []}}
+function checkBadges(){const now=earned().map(b=>b.id);const fresh=now.filter(x=>!S.d.badges.includes(x));S.d.badges=now;
+ if(fresh.length){const b=BADGES.find(x=>x.id===fresh[fresh.length-1]);setTimeout(()=>celebrate(b),60)}}
+function celebrate(b){document.querySelectorAll('.badge-pop').forEach(x=>x.remove());const t=document.createElement('div');t.className='badge-pop';
+ t.innerHTML=`<span class="bi">${b.i}</span><div><b>شارة جديدة: ${b.n}</b><small>${b.d}</small></div>`;document.body.appendChild(t);setTimeout(()=>t.remove(),3800)}
+const badgeHtml=(b,on)=>`<div class="bdg ${on?'on':''}"><span class="bi">${b.i}</span><b>${b.n}</b><small>${b.d}</small></div>`;
 
 /* ===== جودة الهدف ===== */
 function quality(g){
@@ -281,14 +319,15 @@ function teacher(){
  else if(S.tv==='basket')body=basketView();
  else if(S.tv==='goalv')body=myGoalView();
  else if(S.tv==='mytask')body=myTaskView();
+ else if(S.tv==='me')body=meView();
  const tab=(v,ic,l,b)=>`<button class="${S.tv===v||(v==='paths'&&['home','act'].includes(S.tv))?'on':''}" data-tv="${v}">${ICON[ic]}${l}${b?`<span class="badge">${b}</span>`:''}</button>`;
- app.innerHTML=`<div id="lb">${liveBar()}</div><div id="net" class="proto" hidden>لا يوجد اتصال الآن. ما تكتبه محفوظ على جهازك وسيُرسل تلقائياً.</div>`+body+FOOT+`<nav class="nav">${tab('paths','home','الرئيسية')}${tab('basket','bk','سلتي',S.d.basket.length||'')}${tab('goalv','goal','هدفي')}${tab('mytask','task','مهمتي')}</nav>`;
+ app.innerHTML=`<div id="lb">${liveBar()}</div><div id="net" class="proto" hidden>لا يوجد اتصال الآن. ما تكتبه محفوظ على جهازك وسيُرسل تلقائياً.</div>`+body+foot()+`<nav class="nav">${tab('paths','home','الرئيسية')}${tab('basket','bk','سلتي',S.d.basket.length||'')}${tab('goalv','goal','هدفي')}${tab('mytask','task','مهمتي')}${tab('me','me','ملفي')}</nav>`;
  afterRender();
 }
-function liveBar(){return S.live&&!(S.tv==='act'&&S.act===S.live)&&S.tv!=='mytask'?`<div class="live-bar"><span>المدرب الآن في: <b>${h(actBy(S.live).t)}</b></span><button class="btn sm" data-open="${S.live}">انتقل</button></div>`:''}
+function liveBar(){return S.live&&!(S.tv==='act'&&S.act===S.live)&&S.tv!=='mytask'&&S.tv!=='me'?`<div class="live-bar"><span>المدرب الآن في: <b>${h(actBy(S.live).t)}</b></span><button class="btn sm" data-open="${S.live}">انتقل</button></div>`:''}
 function scanView(err){
  app.innerHTML=`<div class="band">${RIP}<div class="wrap"><div class="top">${LOGO}</div><div class="hero"><h1>أهلاً بك</h1><p>امسح رمز QR في بطاقتك بكاميرا الجوال، أو اكتب الرمز المطبوع تحته.</p></div></div></div>
- <div class="wrap stack" style="padding-block:22px"><div class="card"><label for="code">رمز البطاقة</label><input id="code" type="text" dir="ltr" maxlength="6" autocomplete="off" autocapitalize="characters" style="font-family:'Readex Pro';font-size:24px;letter-spacing:.2em;text-align:center"><p class="muted" id="scanerr">${err||'خمسة أحرف وأرقام مطبوعة على بطاقتك.'}</p><button class="btn pri" style="width:100%" data-scan>دخول</button></div></div>${FOOT}`;
+ <div class="wrap stack" style="padding-block:22px"><div class="card"><label for="code">رمز البطاقة</label><input id="code" type="text" dir="ltr" maxlength="6" autocomplete="off" autocapitalize="characters" style="font-family:'Readex Pro';font-size:24px;letter-spacing:.2em;text-align:center"><p class="muted" id="scanerr">${err||'خمسة أحرف وأرقام مطبوعة على بطاقتك.'}</p><button class="btn pri" style="width:100%" data-scan>دخول</button></div></div>${foot()}`;
 }
 function welcomeView(){
  const m=S.me;
@@ -314,14 +353,29 @@ function pathsView(){
 }
 function homeView(){
  const done=ACTS.filter(a=>S.d.done[a.id]).length;const first=(S.me.name||'').split(' ')[0];
- return `<div class="band">${RIP}<div class="wrap"><div class="top">${LOGO}<button class="btn sm" data-tv="paths" style="background:transparent;color:#fff;border-color:rgba(255,255,255,.4)">→ برامجي</button></div><div class="hero"><p class="soft" style="margin:0">${h(PACK.name)}</p><h1>أهلاً أ. ${h(first)}</h1><p>تنقّل بين الأنشطة بحرية، والشريط البرتقالي يخبرك أين وصل المدرب.</p><div class="row" style="margin-top:10px"><span class="chip">أنجزت ${done} من ${ACTS.length}</span><span class="chip">في سلتك ${S.d.basket.length} أفكار</span></div></div></div></div>
- <div class="wrap" style="padding-block:18px"><div class="acts">${ACTS.map((a,i)=>`<button class="act ${S.d.done[a.id]?'done':''} ${S.live===a.id?'live':''}" data-open="${a.id}"><span class="dot">${S.d.done[a.id]?'✓':i+1}</span><span><b>${h(a.t)}</b><span class="muted">${h(a.d)}</span></span><span class="muted" style="white-space:nowrap">${a.min} د</span></button>`).join('')}</div></div>`;
+ return `<div class="band">${RIP}<div class="wrap"><div class="top">${LOGO}<button class="btn sm" data-tv="paths" style="background:transparent;color:#fff;border-color:rgba(255,255,255,.4)">→ برامجي</button></div><div class="hero"><p class="soft" style="margin:0">${h(PACK.name)}</p><h1>أهلاً أ. ${h(first)}</h1><p>تنقّل بين الأنشطة بحرية، والشريط البرتقالي يخبرك أين وصل المدرب.</p><div class="row" style="margin-top:10px"><span class="chip">أنجزت ${done} من ${ACTS.length}</span><span class="chip">⭐ نجومك: ${stars()}</span><span class="chip">🏅 شاراتك: ${S.d.badges.length}</span></div></div></div></div>
+ <div class="wrap" style="padding-block:18px">${nextCard()}<div class="acts">${ACTS.map((a,i)=>`<button class="act ${S.d.done[a.id]?'done':''} ${S.live===a.id?'live':''}" data-open="${a.id}"><span class="dot">${S.d.done[a.id]?'✓':i+1}</span><span><b>${h(a.t)}</b><span class="muted">${h(a.d)}</span></span><span class="muted" style="white-space:nowrap">${a.min} د</span></button>`).join('')}</div></div>`;
+}
+function nextCard(){
+ const und=ACTS.filter(a=>!S.d.done[a.id]);const jd=S.justDone;S.justDone=null;
+ if(!und.length)return `<div class="card" style="margin-bottom:14px;border-color:var(--ok)"><b>أنجزت كل أنشطة الجلسة 🎉</b><p class="muted">خطوتك التالية: مهمة التأمل في صفوفك.</p><button class="btn pri" data-tv="mytask">انتقل إلى «مهمتي» ←</button></div>`;
+ const i=jd?ACTS.findIndex(a=>a.id===jd):-1;const nx=ACTS.slice(i+1).find(a=>!S.d.done[a.id])||und[0];
+ return `<div class="card nextc" style="margin-bottom:14px">${jd?`<span class="chip ok">أنجزت «${h(actBy(jd).t)}» ✓</span>`:''}<p class="muted" style="margin:8px 0 2px">${S.live===nx.id?'المدرب فتح هذا النشاط الآن':'النشاط التالي متى كنت جاهزاً'}</p><div class="row sp"><b>${h(nx.t)}</b><button class="btn pri sm" data-open="${nx.id}">ابدأ ←</button></div></div>`;
+}
+function meView(){
+ const m=S.me;const e=earned().map(b=>b.id);const n=ACTS.filter(a=>S.d.done[a.id]).length;const ini=(m.name||'؟').trim().charAt(0);
+ return `<div class="band">${RIP}<div class="wrap"><div class="top">${LOGO}<span class="chip">${h(m.cohort_name)}</span></div><div class="hero" style="display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center"><span class="avatar">${h(ini)}</span><div><h1 style="font-size:26px">أ. ${h(m.name)}</h1><p style="margin:2px 0 0">بطاقتك: <b dir="ltr" style="font-family:'Readex Pro';letter-spacing:.12em">${m.code}</b>${S.trainer?` · مدربك: ${h(S.trainer)}`:''}</p></div></div></div></div>
+ <div class="wrap stack" style="padding-block:18px">
+ <div class="grid3"><div class="kpi"><b>⭐ ${stars()}</b>نجومك</div><div class="kpi"><b>🏅 ${e.length}</b>من ${BADGES.length} شارات</div><div class="kpi"><b>${n}/${ACTS.length}</b>أنشطة أنجزتها</div></div>
+ <div class="card"><b>شاراتي</b><div class="bdgs" style="margin-top:10px">${BADGES.map(b=>badgeHtml(b,e.includes(b.id))).join('')}</div><p class="muted" style="margin-top:8px">النجوم: نجمة لكل نشاط تنجزه أو مشاركة على الجدار أو ملاحظة لزميل، ونجمتان لاعتماد هدفك، وثلاث لتسليم مهمتك.</p></div>
+ <div class="card"><b>أنشطتي</b><div class="stack" style="margin-top:10px;gap:6px">${ACTS.map((a,i)=>`<button class="mrow" data-open="${a.id}"><span class="dot ${S.d.done[a.id]?'y':''}">${S.d.done[a.id]?'✓':i+1}</span><span>${h(a.t)}</span><span class="muted">${S.d.done[a.id]?'أنجزته':'لم يُنجز'}</span></button>`).join('')}</div></div>
+ <div class="card"><b>بياناتي</b><label for="mynm" style="margin-top:10px">اسمك كما يظهر للمدرب والزملاء</label><div class="row" style="flex-wrap:nowrap"><input id="mynm" type="text" value="${h(m.name)}"><button class="btn sec" data-myname>حفظ</button></div></div>
+ <div class="card"><b>جهاز آخر أو بطاقة أخرى؟</b><p class="muted">إذا كان هذا الجهاز لزميل، اخرج منه. يمكنك الدخول بعدها بمسح بطاقتك من أي جوال، وتجد كل ما أنجزته.</p>${S.confirm==='out'?'<div class="row"><button class="btn" style="border-color:var(--coral);color:var(--coral)" data-logout>نعم، اخرج</button><button class="btn" data-cancel>إلغاء</button></div>':'<button class="btn" data-ask="out">الخروج من هذا الجهاز</button>'}</div></div>`;
 }
 function head(a){return `<div class="wrap" style="padding-top:8px"><button class="back" data-tv="home">→ الجلسة</button><div class="row sp" style="margin:4px 0 12px"><h2>${h(a.t)}</h2><span class="row"><span class="chip">${h(a.mode)}</span><span class="chip">${a.min} د</span></span></div>`}
-const doneBtn=id=>{const i=ACTS.findIndex(a=>a.id===id);const nx=ACTS[i+1];const d=S.d.done[id];
- const lbl=nx?`التالي: ${h(nx.t)} ←`:'إلى «مهمتي» ←';
- return `<div class="card" style="margin:24px 0 8px;display:grid;gap:10px">${d?'<span class="chip ok" style="justify-self:start">أنجزت هذا النشاط ✓</span>':''}
- <button class="btn pri" style="width:100%" data-next="${id}">${d?lbl:'أنجزت، '+lbl}</button><button class="back" style="justify-self:center" data-tv="home">العودة إلى قائمة الجلسة</button></div>`};
+const doneBtn=id=>{const d=S.d.done[id];
+ return `<div class="card" style="margin:24px 0 8px;display:grid;gap:10px">${d?`<span class="chip ok" style="justify-self:start">أنجزت هذا النشاط ✓</span><button class="btn" style="width:100%" data-tv="home">العودة إلى الجلسة</button>`:
+ `<button class="btn pri" style="width:100%" data-next="${id}">أنجزت هذا النشاط ✓</button><p class="muted" style="text-align:center;margin:0">تعود إلى صفحة الجلسة، وتنتقل إلى النشاط التالي متى شئت.</p>`}</div>`};
 function actView(){const a=actBy(S.act);return head(a)+({nomu:aNomu,compass:aCompass,cycle:aCycle,notes:aNotes,strat:aStrat,tool:aTool,gallery:aGallery,goal:aGoal,task:aTask}[a.id])(a)+'</div>'}
 function aNomu(){
  const it=[['guide','اطلعت على دليل الحقيبة ومخرجاتها'],['pre','أجبت عن التقويم القبلي'],['talis','أجبت عن استبانة TALIS']];
@@ -523,7 +577,7 @@ async function login(code){
  S.tv='loading';R();
  let me=null;try{me=await rpc('t_login',{p_code:code})}catch(e){S.tv='scan';R();document.getElementById('scanerr').textContent='تعذّر الاتصال. تأكد من الإنترنت ثم حاول مجدداً.';return}
  if(!me){LS.del('taamul-code');S.tv='scan';R();document.getElementById('scanerr').textContent='لم نجد هذا الرمز. تأكد منه وحاول مرة أخرى.';return}
- S.me=me;LS.set('taamul-code',me.code);
+ S.me=me;S.trainer=me.trainer||'';LS.set('taamul-code',me.code);
  try{const g=await rpc('t_get',{p_code:me.code,p_pack:PK});const local=LS.get('taamul-d-'+me.code,null);
   const srv=g&&g.data&&Object.keys(g.data).length?g.data:null;S.d=Object.assign(blank(),srv||local||{});
   S.live=g.live;S.timerEnd=g.timer_end;S.note=g.note}catch(e){S.d=Object.assign(blank(),LS.get('taamul-d-'+me.code,{}))}
@@ -540,13 +594,13 @@ function startTeacherPoll(){clearInterval(tPoll);tPoll=setInterval(async()=>{if(
 /* ===== المدرب ===== */
 function trLogin(err){
  app.innerHTML=`<div class="band">${RIP}<div class="wrap"><div class="top">${LOGO}</div><div class="hero"><h1>لوحة المدرب</h1><p>اكتب كلمة المدرب السرية. ستُحفظ على هذا الجهاز فلا تُطلب مرة أخرى.</p></div></div></div>
- <div class="wrap" style="padding-block:22px"><div class="card"><label for="tk">كلمة المدرب</label><input id="tk" type="text" dir="ltr" autocomplete="off" value=""><p class="muted" id="tkerr">${err||''}</p><button class="btn pri" style="width:100%" data-trlogin>دخول</button></div></div>${FOOT}`;
+ <div class="wrap" style="padding-block:22px"><div class="card"><label for="tk">كلمة المدرب</label><input id="tk" type="text" dir="ltr" autocomplete="off" value=""><p class="muted" id="tkerr">${err||''}</p><button class="btn pri" style="width:100%" data-trlogin>دخول</button></div></div>${foot()}`;
 }
 async function trBoot(){if(!S.tr.key)return trLogin();app.innerHTML=`<div class="wrap" style="padding:40px 16px"><p>جارٍ التحميل…</p></div>`;await loadDash(true)}
 async function loadDash(force){
  try{const d=await rpc('tr_dash',{p_key:S.tr.key,p_cohort:S.tr.cohort,p_pack:PK});
   if(!d){LS.del('taamul-trkey');S.tr.key='';S.tr.dash=null;return trLogin('كلمة غير صحيحة.')}
-  S.tr.dash=d;S.live=d.cohort.live_act||'nomu';S.timerEnd=d.cohort.timer_end;
+  S.tr.dash=d;S.trainer=d.trainer||S.trainer;S.live=d.cohort.live_act||'nomu';S.timerEnd=d.cohort.timer_end;
   if(force||!typing())R();
  }catch(e){if(force)trLogin('تعذّر الاتصال. تأكد من الإنترنت.')}
 }
@@ -554,12 +608,12 @@ function rosterRows(){return (S.tr.dash.cards||[]).filter(c=>c.name).map(c=>{con
  goal:(d.goal&&d.goal.text)||'',status:(d.task&&d.task.status)||'لم يخطط',done:d.done||{},q:d.notes&&d.notes.qsent?d.notes.q:''}})}
 function trainer(){
  const D=S.tr.dash;const c=D.cohort;const tb=S.tr.tab;
- const T=[['session','الجلسة'],['prog','متابعة الإنجاز'],['att','الحضور'],['goals','الأهداف'],['tasks','المهام'],['cards','البطاقات'],['log','سجلي']];
+ const T=[['session','الجلسة'],['prog','متابعة الإنجاز'],['att','المعلمون'],['goals','الأهداف'],['tasks','المهام'],['cards','البطاقات'],['log','سجلي'],['set','الإعدادات']];
  const r=rosterRows();
- const body={session:trSession,prog:trProg,att:trAtt,goals:trGoals,tasks:trTasks,cards:trCards,log:trLog}[tb](r,c);
+ const body={session:trSession,prog:trProg,att:trAtt,goals:trGoals,tasks:trTasks,cards:trCards,log:trLog,set:trSet}[tb](r,c);
  app.innerHTML=`<div class="band">${RIP}<div class="wide"><div class="top">${LOGO}<a class="btn sm" href="?screen" target="_blank" rel="noopener" style="background:transparent;color:#fff;border-color:rgba(255,255,255,.4);text-decoration:none">شاشة العرض ↗</a></div><div class="hero" style="padding-bottom:20px"><h1>لوحة المدرب</h1><p>${PACK.name} · ${h(c.name)}، ${h(c.date_label)}</p>
  <div class="row" style="margin-top:12px">${D.cohorts.map(x=>`<button class="btn sm" data-coh="${x.id}" style="${x.id===c.id?`background:#fff;color:${x.color};border-color:#fff`:'background:transparent;color:#fff;border-color:rgba(255,255,255,.35)'}">${h(x.name)}</button>`).join('')}</div></div></div></div>
- <div class="wide dash" style="padding-block:20px"><div class="side"><div class="tabs">${T.map(([k,l])=>`<button class="btn sm ${tb===k?'on':''}" data-tab="${k}">${l}</button>`).join('')}</div><p class="muted" style="margin-top:12px">تتحدث البيانات تلقائياً كل بضع ثوانٍ.</p></div><div>${body}</div></div>${FOOT}`;
+ <div class="wide dash" style="padding-block:20px"><div class="side"><div class="tabs">${T.map(([k,l])=>`<button class="btn sm ${tb===k?'on':''}" data-tab="${k}">${l}</button>`).join('')}</div><p class="muted" style="margin-top:12px">تتحدث البيانات تلقائياً كل بضع ثوانٍ.</p></div><div>${body}</div></div>${foot()}`;
 }
 const empty=c=>`<div class="card"><h3>${h(c.name)}</h3><p>لم يدخل أحد من هذه المجموعة بعد.</p><p class="muted">تظهر البيانات هنا لحظة مسح المعلمين لبطاقاتهم في جلسة ${h(c.date_label)}.</p></div>`;
 function trSession(r,c){
@@ -570,7 +624,7 @@ function trSession(r,c){
  <p class="muted">المعلمون يتنقلون بحرية. حين تفتح نشاطاً يظهر لهم شريط «المدرب الآن في» مع زر الانتقال.</p>
  <div class="acts" style="margin-top:10px">${ACTS.map((a,i)=>{const n=r.filter(x=>x.done[a.id]).length;return `<div class="act ${S.live===a.id?'live':''}"><span class="dot">${i+1}</span><span><b>${a.t}</b><span class="muted">${a.min} د · ${a.mode}</span><div class="bar" style="margin-top:6px"><span style="width:${tot?n/tot*100:0}%"></span></div><span class="muted">${n} من ${tot} أنجزوه</span>${S.live===a.id?'':`<details style="margin-top:4px"><summary class="muted" style="cursor:pointer">ملخص النشاط</summary><p style="font-size:15px">${FAC[a.id].g}</p></details>`}</span>${S.live===a.id?'<span class="chip cor">مفتوح الآن</span>':`<button class="btn sm" data-live="${a.id}">افتح للجميع</button>`}</div>`}).join('')}</div>
  ${qs.length?`<div class="card" style="margin-top:14px"><b>أسئلة وصلتك (${qs.length})</b>${qs.map(x=>`<p>«${h(x.q)}» <span class="muted">${h(x.name)}</span></p>`).join('')}</div>`:''}
- <div class="card" style="margin-top:14px"><label for="wa">رابط مجموعة الواتساب لـ${h(c.name)}</label><div class="row" style="flex-wrap:nowrap"><input id="wa" type="text" dir="ltr" placeholder="https://chat.whatsapp.com/..." value="${h(c.wa_link||'')}"><button class="btn sec sm" data-wa>حفظ</button></div><p class="muted">يظهر للمعلم في صفحة الترحيب بعد إدخال اسمه.</p></div>`;
+`;
 }
 function trProg(r,c){
  if(!r.length)return empty(c);
@@ -580,19 +634,32 @@ function trProg(r,c){
  const full=rows.filter(x=>x.p===100).length,low=rows.filter(x=>x.p<50).length;const col=j=>rows.filter(x=>x.m[j]).length;
  return `<div class="grid3" style="margin-bottom:14px"><div class="kpi"><b>${avg}%</b>متوسط إنجاز المجموعة</div><div class="kpi"><b style="color:var(--ok)">${full}</b>أنجزوا كل الأنشطة</div><div class="kpi"><b style="color:var(--coral)">${low}</b>أقل من 50%</div></div>
  <div class="row sp" style="margin-bottom:10px"><span class="muted">✓ أنجز النشاط · ○ لم ينجزه بعد</span><span class="row"><button class="btn sm ${S.tr.sort!=='low'?'on':''}" data-sort="name">ترتيب الحضور</button><button class="btn sm ${S.tr.sort==='low'?'on':''}" data-sort="low">الأقل إنجازاً أولاً</button></span></div>
- <div class="scroll card white" style="padding:0"><table class="tbl prog"><thead><tr><th class="nm">المتدرب</th>${ACTS.map((a,j)=>`<th title="${h(a.t)}"><span class="vt">${j+1}. ${SHORT[a.id]}</span></th>`).join('')}<th>الإنجاز</th></tr></thead><tbody>
- ${rows.map(x=>`<tr><td class="nm">${h(x.name)}</td>${x.m.map(v=>`<td class="ck ${v?'y':''}">${v?'✓':'○'}</td>`).join('')}<td class="pc"><b style="color:${x.p===100?'var(--ok)':x.p<50?'var(--coral)':'var(--ink)'}">${x.p}%</b><div class="bar"><span style="width:${x.p}%;${x.p<50?'background:var(--coral)':''}"></span></div></td></tr>`).join('')}
- </tbody><tfoot><tr><td class="nm muted">أنجزه</td>${ACTS.map((a,j)=>`<td class="ck muted">${col(j)}</td>`).join('')}<td></td></tr></tfoot></table></div>`;
+ <div class="scroll card white" style="padding:0"><table class="tbl prog"><thead><tr><th class="nm">المتدرب</th>${ACTS.map((a,j)=>`<th title="${h(a.t)}"><span class="vt">${j+1}. ${SHORT[a.id]}</span></th>`).join('')}<th>⭐</th><th>الإنجاز</th></tr></thead><tbody>
+ ${rows.map(x=>`<tr><td class="nm">${h(x.name)}</td>${x.m.map(v=>`<td class="ck ${v?'y':''}">${v?'✓':'○'}</td>`).join('')}<td class="ck">${stars(Object.assign(blank(),x.d))}</td><td class="pc"><b style="color:${x.p===100?'var(--ok)':x.p<50?'var(--coral)':'var(--ink)'}">${x.p}%</b><div class="bar"><span style="width:${x.p}%;${x.p<50?'background:var(--coral)':''}"></span></div></td></tr>`).join('')}
+ </tbody><tfoot><tr><td class="nm muted">أنجزه</td>${ACTS.map((a,j)=>`<td class="ck muted">${col(j)}</td>`).join('')}<td></td><td></td></tr></tfoot></table></div>`;
 }
 function trAtt(r,c){
- const cards=S.tr.dash.cards;const free=cards.filter(x=>!x.name);
- return `<div class="grid3" style="margin-bottom:14px"><div class="kpi"><b>${r.length}</b>دخلوا</div><div class="kpi"><b>${free.length}</b>بطاقات لم تُفعَّل</div><div class="kpi"><b>${cards.length}</b>إجمالي البطاقات</div></div>
+ const cards=S.tr.dash.cards;const free=cards.filter(x=>!x.name);const pct=x=>Math.round(ACTS.filter(a=>x.done[a.id]).length/ACTS.length*100);
+ return `<div class="grid3" style="margin-bottom:14px"><div class="kpi"><b>${r.length}</b>معلماً دخلوا</div><div class="kpi"><b>${free.length}</b>بطاقات لم تُفعَّل</div><div class="kpi"><b>${cards.length}</b>إجمالي البطاقات</div></div>
  ${r.length?'':empty(c)}
- <div class="cards">${r.map(x=>`<div class="card" style="padding:12px">${S.tr.ed===x.code?`<input type="text" id="rn" value="${h(x.name)}"><div class="row" style="margin-top:6px"><button class="btn sec sm" data-rnsave="${x.code}">حفظ</button><button class="btn sm" data-rncancel>إلغاء</button></div>`:
- S.tr.mv===x.code?`<b>${h(x.name)}</b><p class="muted">انقله إلى بطاقة لم تُفعَّل:</p><select id="mvto">${free.map(f=>`<option>${f.code}</option>`).join('')}</select><div class="row" style="margin-top:6px"><button class="btn sec sm" data-mvsave="${x.code}">انقل</button><button class="btn sm" data-rncancel>إلغاء</button></div>`:
- `<b>${h(x.name)}</b><p class="muted" dir="ltr" style="text-align:end">${x.code}</p><div class="row"><button class="btn sm" data-rn="${x.code}">تعديل الاسم</button><button class="btn sm" data-mv="${x.code}" ${free.length?'':'disabled'}>بطاقة بديلة</button></div>`}</div>`).join('')}</div>
- <p class="muted" style="margin-top:12px">«بطاقة بديلة» تنقل اسم المعلم وكل ما أنجزه إلى بطاقة جديدة إذا ضاعت بطاقته.</p>`;
+ <div class="stack">${r.map(x=>{const fx=Object.assign(blank(),x.d);const bd=earned(fx);return `<div class="card white">
+ ${S.tr.ed===x.code?`<label for="rn">اسم المعلم</label><input type="text" id="rn" value="${h(x.name)}"><div class="row" style="margin-top:8px"><button class="btn sec sm" data-rnsave="${x.code}">حفظ</button><button class="btn sm" data-rncancel>إلغاء</button></div>`:
+ S.tr.mv===x.code?`<b>${h(x.name)}</b><p class="muted">انقله مع كل ما أنجزه إلى بطاقة لم تُفعَّل:</p><select id="mvto">${free.map(f=>`<option>${f.code}</option>`).join('')}</select><div class="row" style="margin-top:8px"><button class="btn sec sm" data-mvsave="${x.code}">انقل</button><button class="btn sm" data-rncancel>إلغاء</button></div>`:
+ S.confirm==='del:'+x.code?`<b>حذف أ. ${h(x.name)}؟</b><p class="muted">تُحذف كل بياناته وهدفه ومشاركاته وملاحظاته على زملائه، وتعود بطاقته ${x.code} فارغة لمعلم آخر. لا يمكن التراجع.</p><div class="row"><button class="btn sm" style="border-color:var(--coral);color:var(--coral)" data-del="${x.code}">نعم، احذف</button><button class="btn sm" data-rncancel>إلغاء</button></div>`:
+ `<div class="row sp"><div><b>${h(x.name)}</b> <span class="muted" dir="ltr">${x.code}</span><div class="row" style="margin-top:4px"><span class="chip">${pct(x)}% إنجاز</span><span class="chip">⭐ ${stars(fx)}</span><span class="chip">${bd.map(b=>b.i).join(' ')||'لا شارات بعد'}</span></div></div>
+ <div class="row"><button class="btn sm" data-rn="${x.code}">تعديل الاسم</button><button class="btn sm" data-mv="${x.code}" ${free.length?'':'disabled'}>بطاقة بديلة</button><button class="btn sm" style="color:var(--coral)" data-askdel="${x.code}">حذف</button></div></div>`}</div>`}).join('')}</div>
+ <p class="muted" style="margin-top:12px">«بطاقة بديلة» تنقل المعلم وكل ما أنجزه إلى بطاقة جديدة إذا ضاعت بطاقته. «حذف» يزيل معلماً سجّل بالخطأ أو تسجيلاً تجريبياً.</p>`;
 }
+function trSet(r,c){
+ return `<div class="card stack"><h3>بيانات المدرب</h3><div><label for="trn">اسمك كما يظهر للمعلمين</label><input id="trn" type="text" value="${h(S.trainer)}"></div>
+ <div><label for="trk1">كلمة مدرب جديدة (اختياري)</label><input id="trk1" type="password" dir="ltr" autocomplete="new-password" placeholder="ستة أحرف على الأقل"></div><div><label for="trk2">أعد كتابتها</label><input id="trk2" type="password" dir="ltr" autocomplete="new-password"></div>
+ <button class="btn sec" data-trsave>حفظ بيانات المدرب</button><p class="muted">بعد تغيير الكلمة تبقى مسجلاً على هذا الجهاز، وتُطلب الكلمة الجديدة على أي جهاز آخر.</p></div>
+ <div class="card stack" style="margin-top:14px"><h3>بيانات ${h(c.name)}</h3><div class="split"><div><label for="cn">اسم المجموعة</label><input id="cn" type="text" value="${h(c.name)}"></div><div><label for="cd">الموعد</label><input id="cd" type="text" value="${h(c.date_label)}"></div></div>
+ <div><label for="wa">رابط مجموعة الواتساب</label><input id="wa" type="text" dir="ltr" placeholder="https://chat.whatsapp.com/..." value="${h(c.wa_link||'')}"><p class="muted">يظهر للمعلم في صفحة الترحيب بعد إدخال اسمه.</p></div>
+ <button class="btn sec" data-cohsave>حفظ بيانات المجموعة</button><p class="muted">لتعديل مجموعة أخرى اخترها من الأزرار أعلى الصفحة.</p></div>
+ <div class="card" style="margin-top:14px"><h3>هذا الجهاز</h3><p class="muted">اخرج من لوحة المدرب إذا كان الجهاز مشتركاً أو ليس جهازك.</p>${S.confirm==='trout'?'<div class="row"><button class="btn" style="border-color:var(--coral);color:var(--coral)" data-trout>نعم، اخرج</button><button class="btn" data-cancel>إلغاء</button></div>':'<button class="btn" data-ask="trout">الخروج من لوحة المدرب</button>'}</div>`;
+}
+
 function trGoals(r,c){
  if(!r.length)return empty(c);
  const rows=r.map(x=>({...x,q:quality(Object.assign({text:x.goal},x.d.goal||{}))}));
@@ -631,13 +698,13 @@ function printCards(which){
  setTimeout(()=>window.print(),300);
 }
 let trPoll=null;
-function startTrainerPoll(){clearInterval(trPoll);trPoll=setInterval(()=>{if(!document.hidden&&S.tr.key&&S.tr.tab!=='cards')loadDash(false)},8000)}
+function startTrainerPoll(){clearInterval(trPoll);trPoll=setInterval(()=>{if(!document.hidden&&S.tr.key&&!['cards','set'].includes(S.tr.tab)&&!S.confirm&&!S.tr.ed&&!S.tr.mv)loadDash(false)},8000)}
 
 /* ===== شاشة العرض ===== */
 let scPoll=null;
 async function screenLoad(){
  if(!S.tr.key){app.innerHTML=`<div class="screen"><h1>افتح لوحة المدرب أولاً على هذا الجهاز</h1><p><a style="color:#fff" href="?trainer">لوحة المدرب</a></p></div>`;return}
- try{const d=await rpc('tr_dash',{p_key:S.tr.key,p_cohort:S.tr.cohort,p_pack:PK});if(!d)return;S.tr.dash=d;S.live=d.cohort.live_act;S.timerEnd=d.cohort.timer_end;
+ try{const d=await rpc('tr_dash',{p_key:S.tr.key,p_cohort:S.tr.cohort,p_pack:PK});if(!d)return;S.tr.dash=d;S.trainer=d.trainer||S.trainer;S.live=d.cohort.live_act;S.timerEnd=d.cohort.timer_end;
  const walls=S.live==='compass'?['compass']:S.live==='strat'?['peer','doc']:[];S.scWall=[];
  for(const w of walls){const l=await rpc('tr_wall',{p_key:S.tr.key,p_cohort:S.tr.cohort,p_pack:PK,p_wall:w});S.scWall=S.scWall.concat(l||[])}R()}catch(e){}
 }
@@ -668,16 +735,21 @@ app.addEventListener('click',async e=>{
  if(d.start!==undefined){const v=document.getElementById('nm').value.trim();if(v.length<2){toast('اكتب اسمك من فضلك');return}
   el.disabled=true;const ok=await rpc('t_set_name',{p_code:S.me.code,p_name:v});if(!ok){el.disabled=false;toast('تعذّر الحفظ، حاول مجدداً');return}
   S.me.name=v;S.tv='paths';window.scrollTo(0,0);return R()}
+ if(d.myname!==undefined){const v=document.getElementById('mynm').value.trim();if(v.length<2){toast('اكتب اسمك');return}const ok=await rpc('t_set_name',{p_code:S.me.code,p_name:v});if(ok){S.me.name=v;toast('حُفظ اسمك')}else toast('تعذّر الحفظ');return R()}
+ if(d.ask){S.confirm=d.ask;return R()}
+ if(d.cancel!==undefined){S.confirm=null;return R()}
+ if(d.logout!==undefined){LS.del('taamul-code');if(S.me)LS.del('taamul-d-'+S.me.code);LS.del('taamul-obs');clearInterval(tPoll);S.me=null;S.d=blank();S.confirm=null;S.tv='scan';return R()}
+ if(d.trout!==undefined){LS.del('taamul-trkey');S.tr.key='';S.tr.dash=null;S.confirm=null;return trLogin()}
  if(d.trlogin!==undefined){const k=document.getElementById('tk').value.trim();if(!k)return;S.tr.key=k;LS.set('taamul-trkey',k);await loadDash(true);startTrainerPoll();rpc('tr_log',{p_key:k,p_cohort:S.tr.cohort,p_pack:PK,p_act:null,p_body:''}).then(l=>{S.tr.log=l}).catch(()=>{});return}
  if(d.tv){S.tv=d.tv;window.scrollTo(0,0)}
  else if(d.open){S.tv='act';S.act=d.open;if(d.open==='gallery'){S.gal=null;S.recv=null}window.scrollTo(0,0)}
- else if(d.next){D.done[d.next]=true;const i=ACTS.findIndex(a=>a.id===d.next);const nx=ACTS[i+1];if(nx){S.tv='act';S.act=nx.id;if(nx.id==='gallery'){S.gal=null;S.recv=null}}else S.tv='mytask';window.scrollTo(0,0);save()}
+ else if(d.next){D.done[d.next]=true;S.tv='home';S.justDone=d.next;window.scrollTo(0,0);save();toast('أحسنت! ⭐ +1')}
  else if(d.nomu){D.nomu[d.nomu]=!D.nomu[d.nomu];save()}
  else if(d.tog){setPath(d.tog,!getPath(d.tog));save()}
  else if(d.bk){const i=D.basket.indexOf(d.bk);if(i>=0)D.basket.splice(i,1);else{D.basket.push(d.bk);toast('أُضيفت إلى سلتك')}save()}
  else if(d.mini!==undefined){const sec=+(d.mini||60);clearInterval(miniT);const end=Date.now()+sec*1000;miniT=setInterval(()=>{const m=document.getElementById('mini');const l=end-Date.now();if(!m||l<=0){clearInterval(miniT);if(m)m.textContent='انتهى الوقت';return}m.textContent=fmt(l)},250);return}
  else if(d.csend!==undefined){const c=D.compass;if(!c.txt.trim()){toast('اكتب إجابتك أولاً');return}
-  if(c.share){await rpc('t_post',{p_code:S.me.code,p_pack:PK,p_wall:'compass',p_body:c.txt,p_id:c.pid});if(!c.pid){const l=await rpc('t_wall',{p_code:S.me.code,p_pack:PK,p_wall:'compass'});const m=(l||[]).find(x=>x.mine);c.pid=m?m.id:null}}
+  if(c.share){if(!c.pid)D.g.posts++;await rpc('t_post',{p_code:S.me.code,p_pack:PK,p_wall:'compass',p_body:c.txt,p_id:c.pid});if(!c.pid){const l=await rpc('t_wall',{p_code:S.me.code,p_pack:PK,p_wall:'compass'});const m=(l||[]).find(x=>x.mine);c.pid=m?m.id:null}}
   else if(c.pid){await rpc('t_unpost',{p_code:S.me.code,p_id:c.pid});c.pid=null}
   c.sent=true;await saveNow()}
  else if(d.edit){D[d.edit].sent=false;save()}
@@ -687,7 +759,7 @@ app.addEventListener('click',async e=>{
  else if(d.nv){D.notes.verdict=d.nv;save()}
  else if(d.nq!==undefined){if(!D.notes.q.trim())return;D.notes.qsent=true;save();toast('وصل سؤالك للمدرب')}
  else if(d.wall){const k=d.wall;const i=document.getElementById('in-'+k);const v=i.value.trim();if(!v)return;el.disabled=true;
-  await rpc('t_post',{p_code:S.me.code,p_pack:PK,p_wall:k,p_body:v,p_id:S.editing[k]||null});S.editing[k]=null;i.value='';el.disabled=false;el.textContent='انشر';
+  const isNew=!S.editing[k];await rpc('t_post',{p_code:S.me.code,p_pack:PK,p_wall:k,p_body:v,p_id:S.editing[k]||null});S.editing[k]=null;if(isNew){D.g.posts++;save();toast('شكراً لمشاركتك ⭐ +1')}i.value='';el.disabled=false;el.textContent='انشر';
   fillWall(document.getElementById('w-'+k));return}
  else if(d.wedit){const[k,id]=d.wedit.split(':');const w=(document.getElementById('w-'+k)._list||[]).find(x=>String(x.id)===id);if(!w)return;
   S.editing[k]=+id;const i=document.getElementById('in-'+k);i.value=w.body;i.focus();const b=document.querySelector(`[data-wall="${k}"]`);if(b)b.textContent='حفظ التعديل';return}
@@ -699,7 +771,7 @@ app.addEventListener('click',async e=>{
  else if(d.tpub!==undefined){D.tool.pub=true;if(!inBasket('التقويم الذاتي بسلم تقدير'))D.basket.push('التقويم الذاتي بسلم تقدير');save();toast('نُشرت أداتك، وأُضيفت فكرتها إلى سلتك')}
  else if(d.galr!==undefined){loadGallery();return}
  else if(d.give){const k=d.give;const g=id=>document.getElementById('g'+k+id).value.trim();const a=g('a'),b=g('b'),c=g('c');if(!a||!c){toast('نجمة وأمنية على الأقل');return}
-  el.disabled=true;await rpc('t_give',{p_code:S.me.code,p_pack:PK,p_to:k,p_s1:a,p_s2:b,p_wish:c});S.editing['g'+k]=false;const x=S.gal.find(z=>z.code===k);if(x)x.given={a,b,c};toast('وصلت ملاحظتك لزميلك')}
+  el.disabled=true;await rpc('t_give',{p_code:S.me.code,p_pack:PK,p_to:k,p_s1:a,p_s2:b,p_wish:c});S.editing['g'+k]=false;const x=S.gal.find(z=>z.code===k);if(x)x.given={a,b,c};const nw=!D.g.given.includes(k);if(nw)D.g.given.push(k);save();toast(nw?'وصلت ملاحظتك لزميلك ⭐ +1':'حُدّثت ملاحظتك')}
  else if(d.gedit){S.editing['g'+d.gedit]=true}
  else if(d.gst){D.goal.st=Math.max(0,Math.min(5,D.goal.st+ +d.gst));if(D.goal.st===5)D.goal.text=goalSentence(D.goal);save()}
  else if(d.gset){const p=d.gset.indexOf(':');D.goal[d.gset.slice(0,p)]=d.gset.slice(p+1);save()}
@@ -718,14 +790,20 @@ app.addEventListener('click',async e=>{
  else if(d.live){await rpc('tr_set',{p_key:S.tr.key,p_cohort:S.tr.cohort,p_live:d.live,p_timer_end:null,p_wa:null});toast('ظهر للمعلمين شريط الانتقال');return loadDash(true)}
  else if(d.tstart){const end=new Date(Date.now()+actBy(d.tstart).min*60000).toISOString();await rpc('tr_set',{p_key:S.tr.key,p_cohort:S.tr.cohort,p_live:null,p_timer_end:end,p_wa:null});return loadDash(true)}
  else if(d.tstop!==undefined){await rpc('tr_set',{p_key:S.tr.key,p_cohort:S.tr.cohort,p_live:null,p_timer_end:null,p_wa:null});return loadDash(true)}
- else if(d.wa!==undefined){const v=document.getElementById('wa').value.trim();await rpc('tr_set',{p_key:S.tr.key,p_cohort:S.tr.cohort,p_live:null,p_timer_end:S.timerEnd,p_wa:v});toast('حُفظ الرابط');return loadDash(true)}
+ else if(d.cohsave!==undefined){const g=id=>document.getElementById(id).value.trim();const ok=await rpc('tr_cohort',{p_key:S.tr.key,p_cohort:S.tr.cohort,p_name:g('cn'),p_date:g('cd'),p_wa:g('wa')});toast(ok?'حُفظت بيانات المجموعة':'تعذّر الحفظ');return loadDash(true)}
+ else if(d.trsave!==undefined){const nm=document.getElementById('trn').value.trim(),k1=document.getElementById('trk1').value.trim(),k2=document.getElementById('trk2').value.trim();
+  if(k1&&k1.length<6){toast('الكلمة ستة أحرف على الأقل');return}if(k1!==k2){toast('الكلمتان غير متطابقتين');return}
+  const ok=await rpc('tr_profile',{p_key:S.tr.key,p_name:nm,p_new_key:k1});if(!ok){toast('تعذّر الحفظ');return}
+  if(k1){S.tr.key=k1;LS.set('taamul-trkey',k1)}toast(k1?'حُفظت البيانات وتغيّرت كلمة المدرب':'حُفظت البيانات');return loadDash(true)}
+ else if(d.askdel){S.confirm='del:'+d.askdel;S.tr.ed=S.tr.mv=null}
+ else if(d.del){const ok=await rpc('tr_reset',{p_key:S.tr.key,p_code:d.del});S.confirm=null;toast(ok?'حُذف المعلم وأصبحت بطاقته فارغة':'تعذّر الحذف');return loadDash(true)}
  else if(d.sort){S.tr.sort=d.sort}
  else if(d.flt){S.tr.filter=d.flt}
  else if(d.note){const i=document.getElementById('n-'+d.note);if(!i.value.trim())return;await rpc('tr_note',{p_key:S.tr.key,p_code:d.note,p_note:i.value.trim()});toast('وصلت ملاحظتك للمعلم');return loadDash(true)}
  else if(d.noteClear){await rpc('tr_note',{p_key:S.tr.key,p_code:d.noteClear,p_note:''});return loadDash(true)}
  else if(d.rn){S.tr.ed=d.rn;S.tr.mv=null}
  else if(d.mv){S.tr.mv=d.mv;S.tr.ed=null}
- else if(d.rncancel!==undefined){S.tr.ed=S.tr.mv=null}
+ else if(d.rncancel!==undefined){S.tr.ed=S.tr.mv=null;S.confirm=null}
  else if(d.rnsave){const v=document.getElementById('rn').value.trim();if(v.length<2)return;await rpc('tr_rename',{p_key:S.tr.key,p_code:d.rnsave,p_name:v});S.tr.ed=null;return loadDash(true)}
  else if(d.mvsave){const to=document.getElementById('mvto').value;const ok=await rpc('tr_move',{p_key:S.tr.key,p_from:d.mvsave,p_to:to});S.tr.mv=null;toast(ok?'نُقل المعلم إلى البطاقة '+to:'تعذّر النقل');return loadDash(true)}
  else if(d.addn){S.tr.add=+d.addn}
